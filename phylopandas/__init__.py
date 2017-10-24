@@ -1,2 +1,2 @@
-from .dataframe import DataFrame
-from .read import *
+from pandas import *
+from .dataframe import *

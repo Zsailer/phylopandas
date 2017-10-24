@@ -1,26 +1,25 @@
 # PhyloPandas
 
-PhyloPandas brings the [Pandas](https://github.com/pandas-dev/pandas)'s `DataFrame` 
-to phylogenetics. 
+Bringing [Pandas](https://github.com/pandas-dev/pandas)'s `DataFrame`s to phylogenetics. 
 
-It provides `read_` methods from a large list of sequence formats and
-a subclass of Panda's `DataFrame` for easy manipulation of phylogenetic data.
-Boom! Phylogenetics for humans. 
+Read many formats directly to a Pandas `DataFrame` for easy manipulation of phylogenetic data.
 
-How does it work? There is no reinventing the wheel here. PhyloPandas simply provides a
-bridge between [BioPython](https://github.com/biopython/biopython) (great for parsing/writing sequence data) and [Pandas](https://github.com/pandas-dev/pandas) 
+Finally, phylogenetics for humans!
+
+# How does it work?
+
+Don't worry, we didn't reinvent the wheel here. PhyloPandas simply bridges [BioPython](https://github.com/biopython/biopython) (great for parsing/writing sequence data) and [Pandas](https://github.com/pandas-dev/pandas) 
 (great for human-accessible data storage).   
 
-# Basic Usage
+# things you can do
 
-Read from any format:
+Read any format:
 
 ```python
 import phylopandas as phypd
 
-df = phypd.read_fasta('sequences.fasta')
-df = phypd.read_phylip('sequences.phy')
-
+df1 = phypd.read_fasta('sequences.fasta')
+df2 = phypd.read_phylip('sequences.phy')
 ```
 
 Convert formats:
@@ -28,6 +27,21 @@ Convert formats:
 ```python
 df = phypd.read_fasta('sequences.fasta')
 df.to_phylip('sequences.phy')
+```
+
+Merge two *ordered* sequence files (such as a normal sequence file and its alignment).
+
+```python
+# Read sequence file into dataframe
+df = phypd.read_fasta('sequences.fasta')
+
+# Read alignment into dataframe
+align = phypd.read_fasta('alignment.fasta')
+
+# Add alignment using standard pandas functions
+# NOTE: this assumes the alignment and sequence
+#       file are ordered.
+df = df.assign(alignment=align['sequence'])
 ```
 
 # Install
