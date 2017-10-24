@@ -1,13 +1,14 @@
-# PhyloPandas: Pandas for phylogenetics
+# PhyloPandas
 
-PhyloPandas brings the Pandas `DataFrame` to phylogenetics. 
+PhyloPandas brings the [Pandas](https://github.com/pandas-dev/pandas)'s `DataFrame` 
+to phylogenetics. 
 
 It provides `read_` methods from a large list of sequence formats and
 a subclass of Panda's `DataFrame` for easy manipulation of phylogenetic data.
 Boom! Phylogenetics for humans. 
 
 How does it work? There is no reinventing the wheel here. PhyloPandas simply provides a
-bridge between BioPython (great for parsing/writing sequence data) and Pandas 
+bridge between [BioPython](https://github.com/biopython/biopython) (great for parsing/writing sequence data) and [Pandas](https://github.com/pandas-dev/pandas) 
 (great for human-accessible data storage).   
 
 # Basic Usage
@@ -31,7 +32,14 @@ df.to_phylip('sequences.phy')
 
 # Install
 
+Install from PyPi:
+
+```
+pip install phylopandas
+```
+
 Install from source:
+
 ```
 git clone https://github.com/Zsailer/phylopandas
 cd phylopandas
