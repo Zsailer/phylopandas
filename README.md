@@ -6,7 +6,7 @@ Read many formats directly to a Pandas `DataFrame` for easy manipulation of phyl
 
 Finally, phylogenetics for humans!
 
-# How does it work?
+# how does it work?
 
 Don't worry, we didn't reinvent the wheel here. PhyloPandas simply bridges [BioPython](https://github.com/biopython/biopython) (great for parsing/writing sequence data) and [Pandas](https://github.com/pandas-dev/pandas) 
 (great for human-accessible data storage).   
@@ -29,7 +29,7 @@ df = phypd.read_fasta('sequences.fasta')
 df.to_phylip('sequences.phy')
 ```
 
-Merge two *ordered* sequence files (such as a normal sequence file and its alignment).
+Merge two **ordered** sequence files (like raw sequence file and its alignment).
 
 ```python
 # Read sequence file into dataframe
@@ -49,7 +49,7 @@ Write out the alignment in from the DataFrame in the last example.
 df.to_fasta('new_alignment.fasta', sequence_col='alignment')
 ``` 
 
-# Install
+# installation
 
 Install from PyPi:
 
@@ -65,7 +65,7 @@ cd phylopandas
 pip install -e .
 ```
 
-# Dependencies
+# dependencies
 
 * BioPython
 * Pandas
