@@ -44,6 +44,11 @@ align = phypd.read_fasta('alignment.fasta')
 df = df.assign(alignment=align['sequence'])
 ```
 
+Write out the alignment in from the DataFrame in the last example.
+```python
+df.to_fasta('new_alignment.fasta', sequence_col='alignment')
+``` 
+
 # Install
 
 Install from PyPi:
