@@ -1,33 +1,44 @@
 # PhyloPandas: Pandas for phylogenetics
 
-Phylogenetics is cursed by a myriad of file formats. It seems like each piece of 
-phylogenetic software defines its own format and won't accept extra metadata maybe
-useful for interpreting output. I found myself constantly writing parsers and writers, 
-stripping out metadata, shortening labels, and injecting metadata at the end.
-To make things worse, most of these formats are unreadable to any human. 
+PhyloPandas brings the Pandas `DataFrame` to phylogenetics. 
 
-PhyloPandas simplifies this problem. It uses `pandas.DataFrame` to centralize
-the data. PhyloPandas subclasses `DataFrame` and appends a bunch of methods for
-writing to phylogenetic formats necessary for working with phylogenetic software.
-Then, it seamless reads the output and adds new columns of data to the DataFrame.
+It provides `read_` methods from a large list of sequence formats and
+a subclass of Panda's `DataFrame` for easy manipulation of phylogenetic data.
+Boom! Phylogenetics for humans. 
 
-When you're finished, write your DataFrame to a CSV or Excel file using the usual
-pandas interface. Boom! Human readable phylogenetics. 
-
-How does it work? There is no reinventing the wheel here. PhyloPandas simply bridges
-BioPython (great for parsing sequence data) and Pandas.  
+How does it work? There is no reinventing the wheel here. PhyloPandas simply provides a
+bridge between BioPython (great for parsing/writing sequence data) and Pandas 
+(great for human-accessible data storage).   
 
 # Basic Usage
+
+Read from any format:
 
 ```python
 import phylopandas as phypd
 
 df = phypd.read_fasta('sequences.fasta')
-df
+df = phypd.read_phylip('sequences.phy')
+
 ```
 
-Write the dataframe to Phylip format.
+Convert formats:
 
 ```python
+df = phypd.read_fasta('sequences.fasta')
 df.to_phylip('sequences.phy')
 ```
+
+# Install
+
+Install from source:
+```
+git clone https://github.com/Zsailer/phylopandas
+cd phylopandas
+pip install -e .
+```
+
+# Dependencies
+
+* BioPython
+* Pandas
