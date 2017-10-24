@@ -13,24 +13,23 @@ Don't worry, we didn't reinvent the wheel here. PhyloPandas simply bridges [BioP
 
 # things you can do
 
-Read any format:
-
+1. Read any format:
 ```python
 import phylopandas as phypd
 
 df1 = phypd.read_fasta('sequences.fasta')
 df2 = phypd.read_phylip('sequences.phy')
 ```
-
-Convert formats:
-
+2. Write any format:
+```python
+df1.to_clustal('sequences.clustal')
+```
+3. Convert formats:
 ```python
 df = phypd.read_fasta('sequences.fasta')
 df.to_phylip('sequences.phy')
 ```
-
-Merge two **ordered** sequence files (like raw sequence file and its alignment).
-
+4. Merge two **ordered** sequence files (like raw sequence file and its alignment).
 ```python
 # Read sequence file into dataframe
 df = phypd.read_fasta('sequences.fasta')
@@ -43,8 +42,7 @@ align = phypd.read_fasta('alignment.fasta')
 #       file are ordered.
 df = df.assign(alignment=align['sequence'])
 ```
-
-Write out the alignment in from the DataFrame in the last example.
+5. Write out alignment in last example.
 ```python
 df.to_fasta('new_alignment.fasta', sequence_col='alignment')
 ``` 
