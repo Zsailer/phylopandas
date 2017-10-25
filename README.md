@@ -1,10 +1,8 @@
 # PhyloPandas
 
-Bringing [Pandas](https://github.com/pandas-dev/pandas)'s `DataFrame`s to phylogenetics. 
+*Bringing [Pandas](https://github.com/pandas-dev/pandas) `DataFrame` to phylogenetics.*
 
-Read many formats directly to a Pandas `DataFrame` for easy manipulation of phylogenetic data.
-
-Finally, phylogenetics for humans!
+Read sequence formats into Pandas `DataFrame` for easy manipulation of phylogenetic data. **Finally, phylogenetics for humans!**
 
 # how does it work?
 
