@@ -2,11 +2,11 @@
 
 *Bringing [Pandas](https://github.com/pandas-dev/pandas) `DataFrame` to phylogenetics.*
 
-Read sequence formats into Pandas `DataFrame` for easy manipulation of phylogenetic data. **Finally, phylogenetics for humans!**
+Read sequence formats into Pandas `DataFrame` for easy manipulation of phylogenetic data. Finally, phylogenetics for humans!
 
 # how does it work?
 
-Don't worry, we didn't reinvent the wheel here. PhyloPandas simply bridges [BioPython](https://github.com/biopython/biopython) (great for parsing/writing sequence data) and [Pandas](https://github.com/pandas-dev/pandas) 
+Don't worry, we didn't reinvent the wheel. PhyloPandas simply bridges [BioPython](https://github.com/biopython/biopython) (great for parsing/writing sequence data) and [Pandas](https://github.com/pandas-dev/pandas) 
 (great for human-accessible data storage).   
 
 # things you can do
@@ -45,7 +45,7 @@ df = df.assign(alignment=align['sequence'])
 df.to_fasta('new_alignment.fasta', sequence_col='alignment')
 ``` 
 
-# installation
+# install
 
 Install from PyPi:
 
