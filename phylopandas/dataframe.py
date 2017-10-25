@@ -25,19 +25,26 @@ def _read(filename, format, seq_label='sequence', **kwargs):
     # Port to DataFrame.
     return DataFrame(data)
 
-def _write(dataframe, filename, format, sequence_col='sequence', **kwargs):
+def _write(dataframe, filename, format, sequence_col='sequence', id_only=False, **kwargs):
     """Write a PhyloPandas DataFrame to a sequence file.
     """
     seq_records = []
     # Iterate through dataframe rows
     for i, row in dataframe.iterrows():
-        
+        seq = Seq(row[sequence_col])
         # Create a SeqRecord and append to list.
-        seq_records.append(SeqRecord(
-            Seq(row[sequence_col]),
-            id=row['id'],
-            name=row['name'],
-            description=row['description']))
+        if id_only:
+            seq_records.append(SeqRecord(
+                seq,
+                id=row['id'],
+                name='',
+                description=''))
+        else:
+            seq_records.append(SeqRecord(
+                seq,
+                id=row['id'],
+                name=row['name'],
+                description=row['description']))
             
     # Write out sequences        
     SeqIO.write(seq_records, filename, format=format, **kwargs)
@@ -116,9 +123,9 @@ def read_paml(filename, **kwargs):
 
 class DataFrame(pd.DataFrame):
     
-    def to_fasta(self, f, sequence_col='sequence'):
+    def to_fasta(self, f, sequence_col='sequence', id_only=True):
         """Write to fasta format."""
-        _write(self, f, format="fasta")
+        _write(self, f, format="fasta", id_only=True)
         
     def to_phylip(self, f, sequence_col='sequence'):
         """Write to phylip format."""
