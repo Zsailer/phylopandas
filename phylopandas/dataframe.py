@@ -47,27 +47,27 @@ def _write(dataframe, filename=None, schema='fasta', sequence_col='sequence', id
 
 def read_fasta(filename, **kwargs):
     """Read fasta format."""
-    return _read(filename, format='fasta', **kwargs)
+    return _read(filename, schema='fasta', **kwargs)
 
 def read_phylip(filename, **kwargs):
     """Read phylip format."""
-    return _read(filename, format='phylip', **kwargs)
+    return _read(filename, schema='phylip', **kwargs)
 
 def read_clustal(filename, **kwargs):
     """Read clustal format."""
-    return _read(filename, format='clustal', **kwargs)
+    return _read(filename, schema='clustal', **kwargs)
 
 def read_embl(filename, **kwargs):
     """Read the EMBL flat file format."""
-    return _read(filename, format='embl', **kwargs)
+    return _read(filename, schema='embl', **kwargs)
 
 def read_nexus(filename, **kwargs):
     """Read the EMBL flat file format."""
-    return _read(filename, format='nexus', **kwargs)
+    return _read(filename, schema='nexus', **kwargs)
 
 def read_swiss(filename, **kwargs):
     """Read Swiss-Prot aka UniProt format."""
-    return _read(filename, format='nexus', **kwargs)
+    return _read(filename, schema='nexus', **kwargs)
 
 
 class DataFrame(pd.DataFrame):
