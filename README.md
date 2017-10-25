@@ -1,15 +1,16 @@
-# PhyloPandas
+# PhyloPandas # 
 
-*Bringing [Pandas](https://github.com/pandas-dev/pandas) `DataFrame` to phylogenetics.*
+**Bringing the [Pandas](https://github.com/pandas-dev/pandas) `DataFrame` to phylogenetics.**
 
-Read sequence formats into Pandas `DataFrame` for easy manipulation of phylogenetic data. Finally, phylogenetics for humans!
+PhyloPandas provides a Pandas-like interface for reading various sequence formats into DataFrames. This enables easy manipulation of phylogenetic data using familiar Python/Pandas functions. Finally, phylogenetics for humans!
 
-# how does it work?
+## how does it work?
 
-Don't worry, we didn't reinvent the wheel. PhyloPandas simply bridges [BioPython](https://github.com/biopython/biopython) (great for parsing/writing sequence data) and [Pandas](https://github.com/pandas-dev/pandas) 
-(great for human-accessible data storage).   
+Don't worry, we didn't reinvent the wheel. **PhyloPandas** is essentially a [pandas DataFrame](https://github.com/pandas-dev/pandas) 
+(great for human-accessible data storage) interface on top of [Biopython's SeqIO](https://github.com/biopython/biopython) (great for parsing/writing sequence data). 
 
-# things you can do
+
+## things you can do
 
 1. Read any format:
 ```python
@@ -45,7 +46,7 @@ df = df.assign(alignment=align['sequence'])
 df.to_fasta('new_alignment.fasta', sequence_col='alignment')
 ``` 
 
-# install
+## install
 
 Install from PyPi:
 
@@ -61,7 +62,7 @@ cd phylopandas
 pip install -e .
 ```
 
-# dependencies
+## dependencies
 
 * BioPython
 * Pandas
