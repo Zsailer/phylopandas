@@ -4,13 +4,13 @@
 
 PhyloPandas provides a Pandas-like interface for reading various sequence formats into DataFrames. This enables easy manipulation of phylogenetic data using familiar Python/Pandas functions. Finally, phylogenetics for humans!
 
-## how does it work?
+## How does it work?
 
 Don't worry, we didn't reinvent the wheel. **PhyloPandas** is essentially a [pandas DataFrame](https://github.com/pandas-dev/pandas) 
 (great for human-accessible data storage) interface on top of [Biopython's SeqIO](https://github.com/biopython/biopython) (great for parsing/writing sequence data). 
 
 
-## things you can do
+## Basic Usage
 
 1. Read any format:
 ```python
@@ -46,7 +46,7 @@ df = df.assign(alignment=align['sequence'])
 df.to_fasta('new_alignment.fasta', sequence_col='alignment')
 ``` 
 
-## install
+## Install
 
 Install from PyPi:
 
@@ -62,7 +62,7 @@ cd phylopandas
 pip install -e .
 ```
 
-## dependencies
+## Dependencies
 
 * BioPython
 * Pandas
