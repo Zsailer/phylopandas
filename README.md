@@ -6,7 +6,7 @@ PhyloPandas provides a Pandas-like interface for reading various sequence format
 
 ## How does it work?
 
-Don't worry, we didn't reinvent the wheel. **PhyloPandas** is simply the [Pandas DataFrame](https://github.com/pandas-dev/pandas) 
+Don't worry, we didn't reinvent the wheel. **PhyloPandas** is simply places a [DataFrame](https://github.com/pandas-dev/pandas) 
 (great for human-accessible data storage) interface on top of [Biopython's SeqIO](https://github.com/biopython/biopython) module  (great for parsing/writing sequence data). 
 
 
