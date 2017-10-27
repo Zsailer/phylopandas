@@ -72,7 +72,6 @@ def read_swiss(filename, **kwargs):
 
 def read_blast_xml(filename, **kwargs):
     """Read BLAST XML format."""
-    
     # Read file.
     with open(filename, 'r') as f:
         blast_record = NCBIXML.read(f)    
@@ -128,6 +127,3 @@ class DataFrame(pd.DataFrame):
     def to_swiss(self, filename=None, sequence_col='sequence'):
         """Write Swiss-Prot aka UniProt format."""
         return _write(self, filename=filename, schema="swiss")
-        
-    
-    
