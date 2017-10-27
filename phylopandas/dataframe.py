@@ -4,6 +4,7 @@ import re
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio.Blast import NCBIXML
 
 import pandas as pd
 
@@ -68,6 +69,38 @@ def read_nexus(filename, **kwargs):
 def read_swiss(filename, **kwargs):
     """Read Swiss-Prot aka UniProt format."""
     return _read(filename, schema='nexus', **kwargs)
+
+def read_blast_xml(filename, **kwargs):
+    """Read BLAST XML format."""
+    
+    # Read file.
+    with open(filename, 'r') as f:
+        blast_record = NCBIXML.read(f)    
+
+    # Prepare DataFrame fields.
+    data = {'id':[], 
+        'accession':[], 
+        'hit_def':[], 
+        'hit_id':[], 
+        'title':[],
+        'length':[],
+        'e_value':[],
+        'sequence':[]}
+    
+    # Get alignments from blast result.
+    for i, s in enumerate(blast_record.alignments):
+        data['accession'] = s.accession
+        data['hit_def'] = s.hit_def
+        data['hit_id'] = s.hit_id
+        data['title'] = s.title
+        data['length'] = s.length
+        data['e_value'] = s.hsps[0].expect
+        data['sequence'] = s.hsps[0].sbjct
+        
+        data['id'].append('XX{:08d}'.format(i))
+        
+    # Port to DataFrame.
+    return DataFrame(data)    
 
 
 class DataFrame(pd.DataFrame):
