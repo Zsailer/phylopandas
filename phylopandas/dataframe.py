@@ -13,20 +13,19 @@ def _read(filename, schema, seq_label='sequence', **kwargs):
     a Pandas DataFrame.
     """
     # Prepare DataFrame fields.
-    data = {'id':[], seq_label:[], 'description':[], 'name':[], 'db_id':[]}
+    data = {'id':[], seq_label:[], 'description':[], 'name':[]}
     
     # Parse Fasta file.
     for i, s in enumerate(SeqIO.parse(filename, format=schema, **kwargs)):
-        data['db_id'].append(s.id)
+        data['id'].append(s.id)
         data[seq_label].append(str(s.seq))
         data['description'].append(s.description)
         data['name'].append(s.name)
-        data['id'].append('XX{:08d}'.format(i))
     
     # Port to DataFrame.
     return DataFrame(data)
 
-def _write(dataframe, filename=None, schema='fasta', sequence_col='sequence', id_only=False, **kwargs):
+def _write(dataframe, filename=None, schema='fasta', sequence_col='sequence', id_col='id', id_only=False, **kwargs):
     """Write a PhyloPandas DataFrame to a sequence file.
     """
     seq_records = []
@@ -35,14 +34,14 @@ def _write(dataframe, filename=None, schema='fasta', sequence_col='sequence', id
         seq = Seq(row[sequence_col])
         # Create a SeqRecord and append to list.
         if id_only:
-            record = SeqRecord(seq, id=row['id'], name='', description='')
+            record = SeqRecord(seq, id=row[id_col], name='', description='')
         else:
-            record = SeqRecord(seq, id=row['id'], name=row['name'], description=row['description'])
+            record = SeqRecord(seq, id=row[id_col], name=row['name'], description=row['description'])
         seq_records.append(record)
             
     # Write to disk or return string
-    if filename != None:  
-        SeqIO.write(seq_records, filename, format=format, **kwargs)
+    if filename != None:
+        SeqIO.write(seq_records, filename, format=schema, **kwargs)
     else:
         return "".join([s.format(schema) for s in seq_records])
 
@@ -77,8 +76,7 @@ def read_blast_xml(filename, **kwargs):
         blast_record = NCBIXML.read(f)    
 
     # Prepare DataFrame fields.
-    data = {'id':[], 
-        'accession':[], 
+    data = {'accession':[], 
         'hit_def':[], 
         'hit_id':[], 
         'title':[],
@@ -96,21 +94,19 @@ def read_blast_xml(filename, **kwargs):
         data['e_value'] = s.hsps[0].expect
         data['sequence'] = s.hsps[0].sbjct
         
-        data['id'].append('XX{:08d}'.format(i))
-        
     # Port to DataFrame.
     return DataFrame(data)    
 
 
 class DataFrame(pd.DataFrame):
     
-    def to_fasta(self, filename=None, sequence_col='sequence', id_only=True):
+    def to_fasta(self, filename=None, sequence_col='sequence', id_col='id', id_only=True):
         """Write to fasta format."""
-        return _write(self, filename=filename, schema="fasta", id_only=True)
+        return _write(self, filename=filename, schema="fasta", id_col=id_col, id_only=True)
         
-    def to_phylip(self, filename=None, sequence_col='sequence'):
+    def to_phylip(self, filename=None, sequence_col='sequence', id_col='id'):
         """Write to phylip format."""
-        return _write(self, filename=filename, schema="phylip")
+        return _write(self, filename=filename, schema="phylip", id_col=id_col)
 
     def to_clustal(self, filename=None, sequence_col='sequence'):
         """Write to alignment format of Clustal X and Clustal W."""
