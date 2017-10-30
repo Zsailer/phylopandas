@@ -13,10 +13,10 @@ Don't worry, we didn't reinvent the wheel. **PhyloPandas** is simply a [DataFram
 
 1. Read any format:
 ```python
-import phylopandas as phypd
+import phylopandas as pd
 
-df1 = phypd.read_fasta('sequences.fasta')
-df2 = phypd.read_phylip('sequences.phy')
+df1 = pd.read_fasta('sequences.fasta')
+df2 = pd.read_phylip('sequences.phy')
 ```
 2. Write any format:
 ```python
@@ -30,10 +30,10 @@ df.to_phylip('sequences.phy')
 4. Merge two **ordered** sequence files (like raw sequence file and its alignment).
 ```python
 # Read sequence file into dataframe
-df = phypd.read_fasta('sequences.fasta')
+df = pd.read_fasta('sequences.fasta')
 
 # Read alignment into dataframe
-align = phypd.read_fasta('alignment.fasta')
+align = pd.read_fasta('alignment.fasta')
 
 # Add alignment using standard pandas functions
 # NOTE: this assumes the alignment and sequence
