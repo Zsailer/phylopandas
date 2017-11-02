@@ -11,6 +11,9 @@ PhyloPandas provides a Pandas-like interface for reading various sequence format
 Don't worry, we didn't reinvent the wheel. **PhyloPandas** is simply a [DataFrame](https://github.com/pandas-dev/pandas) 
 (great for human-accessible data storage) interface on top of [Biopython](https://github.com/biopython/biopython) (great for parsing/writing sequence data). 
 
+When you import PhyloPandas, you import Pandas with a PhyloPandas flavor. That means, the usual `read_` functions 
+are available ('read_csv', 'read_excel', etc.), but the returned DataFrame includes extra `to_` methods (`to_fasta`, `to_phylip`, etc.) 
+
 ## Basic Usage
 
 1. Read any format:
@@ -52,7 +55,15 @@ df.to_fasta('new_alignment.fasta', sequence_col='alignment')
 It's *easy* to create new read/write functions and methods for PhyloPandas. If you 
 have a format you'd like to add, please submit PRs! There are many more formats 
 in Biopython that I haven't had the time to add myself, so please don't be afraid
-to add then yourself! I thank you ahead of time!
+to add them! I thank you ahead of time!
+
+## Testing
+
+PhyloPandas includes a small [pytest]() suite. Run these tests from base directory.
+```
+$ cd phylopandas
+$ pytest
+```
 
 ## Install
 
