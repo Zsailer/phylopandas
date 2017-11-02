@@ -10,6 +10,9 @@ PhyloPandas
 
 PhyloPandas provides a Pandas-like interface for reading various sequence formats into DataFrames. This enables easy manipulation of phylogenetic data using familiar Python/Pandas functions. Finally, phylogenetics for humans!
 
+.. image:: _images/jlab.png
+  :align: center
+  
 How does it work?
 -----------------
 

@@ -4,6 +4,8 @@
 
 PhyloPandas provides a Pandas-like interface for reading various sequence formats into DataFrames. This enables easy manipulation of phylogenetic data using familiar Python/Pandas functions. Finally, phylogenetics for humans!
 
+<img src='docs/_images/jlab.png' align="middle">
+
 ## How does it work?
 
 Don't worry, we didn't reinvent the wheel. **PhyloPandas** is simply a [DataFrame](https://github.com/pandas-dev/pandas) 

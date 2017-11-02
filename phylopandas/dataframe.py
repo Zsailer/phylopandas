@@ -100,9 +100,9 @@ def read_blast_xml(filename, **kwargs):
 
 class DataFrame(pd.DataFrame):
     
-    def to_fasta(self, filename=None, sequence_col='sequence', id_col='id', id_only=True):
+    def to_fasta(self, filename=None, sequence_col='sequence', id_col='id', id_only=False):
         """Write to fasta format."""
-        return _write(self, filename=filename, schema="fasta", id_col=id_col, id_only=True)
+        return _write(self, filename=filename, schema="fasta", id_col=id_col, id_only=id_only)
         
     def to_phylip(self, filename=None, sequence_col='sequence', id_col='id'):
         """Write to phylip format."""
