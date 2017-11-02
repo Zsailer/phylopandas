@@ -2,6 +2,7 @@ import os
 import re 
 
 from Bio import SeqIO
+from Bio import AlignIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Blast import NCBIXML
@@ -12,18 +13,56 @@ def _read(filename, schema, seq_label='sequence', **kwargs):
     """Use BioPython's sequence parsing module to convert any file format to 
     a Pandas DataFrame.
     """
-    # Prepare DataFrame fields.
-    data = {'id':[], seq_label:[], 'description':[], 'name':[]}
-    
-    # Parse Fasta file.
-    for i, s in enumerate(SeqIO.parse(filename, format=schema, **kwargs)):
-        data['id'].append(s.id)
-        data[seq_label].append(str(s.seq))
-        data['description'].append(s.description)
-        data['name'].append(s.name)
-    
-    # Port to DataFrame.
-    return DataFrame(data)
+        
+    # Distinguish sequence vs. alignment, pass SeqRecords
+    if schema == 'clustal':
+    	alignIter = AlignIO.parse(filename, format=schema, **kwargs)
+    	# Parse the multiple sequence alignments
+    	alignDict = _parseAlignRec(alignIter, seq_label)
+    	alignDict = {(outerKey, innerKey): values for outerKey, innerDict in alignDict.items() for innerKey, values in innerDict.items()}
+    	#data = pd.DataFrame.from_dict(data, orient='index')
+    	data = pd.DataFrame(alignDict).T
+    else:
+    	# Just iterate through sequences
+    	seqIter = SeqIO.parse(filename, format=schema, **kwargs)
+    	# Port to DataFrame
+    	seqDict = _parseSeqRec(seqIter, seq_label)
+    	data = pd.DataFrame(seqDict).T
+        
+    # Return DataFrame.
+    return data
+
+def _parseAlignRec(alignIter, seq_label):
+	"""A Bio.Align.MultipleSeqAlignment parser
+	   Trying out a nested dictionary for alignment files
+	"""
+	alignData = dict()
+	
+	for i, a in enumerate(alignIter):
+		#alignData['star'].append(a._star_info)
+		#alignData['seqRec'].append(_parseSeqRec(a._records, seq_label))
+		seqData = _parseSeqRec(a._records, seq_label)
+		for outerKey, innerDict in seqData.items():
+			innerDict['star'] = a._star_info
+		alignData[i] = seqData
+		
+	return alignData
+
+def _parseSeqRec(seqIter, seq_label):
+	"""A Bio.SequenceRecord  parser.
+	"""
+	seqDict = dict()
+	# Prepare DataFrame fields.
+	#seqData = {'id':[], seq_label:[], 'description':[], 'name':[]}
+	for i, s in enumerate(seqIter):
+		seqData = dict()
+		seqData['id'] = s.id
+		seqData[seq_label] = str(s.seq)
+		seqData['description'] = s.description
+		seqData['name'] = s.name
+		seqDict[i] = seqData
+	
+	return seqDict
 
 def _write(dataframe, filename=None, schema='fasta', sequence_col='sequence', id_col='id', id_only=False, **kwargs):
     """Write a PhyloPandas DataFrame to a sequence file.
