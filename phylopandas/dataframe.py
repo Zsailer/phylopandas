@@ -5,13 +5,24 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Blast import NCBIXML
+import Bio.Alphabet
 
 import pandas as pd
 
-def _read(filename, schema, seq_label='sequence', **kwargs):
+def _read(filename, schema, seq_label='sequence', alphabet=None, **kwargs):
     """Use BioPython's sequence parsing module to convert any file format to 
     a Pandas DataFrame.
     """
+    # Check Alphabet if given
+    if alphabet is None: 
+        alphabet = Bio.Alphabet.Alphabet()
+    elif alphabet in ['dna', 'rna', 'protein', 'nucleotide']:
+        alphabet = getattr(Bio.Alphabet, 'generic_{}'.format(alphabet))
+    else:
+        raise Exception("The alphabet is not recognized. Must be 'dna', 'rna', 'nucleotide', or 'protein'.")
+    
+    kwargs.update(alphabet=alphabet)
+
     # Prepare DataFrame fields.
     data = {'id':[], seq_label:[], 'description':[], 'name':[]}
     
@@ -25,13 +36,21 @@ def _read(filename, schema, seq_label='sequence', **kwargs):
     # Port to DataFrame.
     return DataFrame(data)
 
-def _write(dataframe, filename=None, schema='fasta', sequence_col='sequence', id_col='id', id_only=False, **kwargs):
+def _write(dataframe, filename=None, schema='fasta', sequence_col='sequence', id_col='id', id_only=False, alphabet=None, **kwargs):
     """Write a PhyloPandas DataFrame to a sequence file.
     """
+    # Check Alphabet if given
+    if alphabet is None: 
+        alphabet = Bio.Alphabet.Alphabet()
+    elif alphabet in ['dna', 'rna', 'protein', 'nucleotide']:
+        alphabet = getattr(Bio.Alphabet, 'generic_{}'.format(alphabet))
+    else:
+        raise Exception("The alphabet is not recognized. Must be 'dna', 'rna', 'nucleotide', or 'protein'.")
+    
     seq_records = []
     # Iterate through dataframe rows
     for i, row in dataframe.iterrows():
-        seq = Seq(row[sequence_col])
+        seq = Seq(row[sequence_col], alphabet)
         # Create a SeqRecord and append to list.
         if id_only:
             record = SeqRecord(seq, id=row[id_col], name='', description='')
@@ -112,13 +131,13 @@ class DataFrame(pd.DataFrame):
         """Write to alignment format of Clustal X and Clustal W."""
         return _write(self, filename=filename, schema="clustal")
         
-    def to_embl(self, filename=None, sequence_col='sequence'):
+    def to_embl(self, alphabet, filename=None, sequence_col='sequence'):
         """Write to the EMBL flat file format."""
-        return _write(self, filename=filename, schema="embl")
+        return _write(self, alphabet=alphabet, filename=filename, schema="embl")
 
-    def to_nexus(self, filename=None, sequence_col='sequence'):
+    def to_nexus(self, alphabet, filename=None, sequence_col='sequence'):
         """Write to the NEXUS multiple alignment format."""
-        return _write(self, filename=filename, schema="nexus")
+        return _write(self, alphabet=alphabet, filename=filename, schema="nexus")
         
     def to_swiss(self, filename=None, sequence_col='sequence'):
         """Write Swiss-Prot aka UniProt format."""
