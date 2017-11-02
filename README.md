@@ -71,5 +71,5 @@ pip install -e .
 
 ## Dependencies
 
-* BioPython
-* Pandas
+* [BioPython](https://github.com/biopython/biopython): Library for managing and manipulating biological data.
+* [Pandas](https://github.com/pandas-dev/pandas): Flexible and powerful data analysis / manipulation library for Python
