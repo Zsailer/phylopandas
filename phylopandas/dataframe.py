@@ -117,8 +117,9 @@ def read_blast_xml(filename, **kwargs):
     # Port to DataFrame.
     return DataFrame(data)    
 
-@wraps(pd.DataFrame)
+
 class DataFrame(pd.DataFrame):
+    __doc__ == pd.DataFrame.__doc__
     
     def to_fasta(self, filename=None, sequence_col='sequence', id_col='id', id_only=False):
         """Write to fasta format."""
