@@ -2,6 +2,9 @@
 
 **Bringing the [Pandas](https://github.com/pandas-dev/pandas) `DataFrame` to phylogenetics.**
 
+[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/phylopandas/Lobby)
+[![Documentation Status](http://readthedocs.org/projects/phylopandas/badge/?version=latest)](http://phylopandas.readthedocs.io/en/latest/?badge=latest)
+
 PhyloPandas provides a Pandas-like interface for reading various sequence formats into DataFrames. This enables easy manipulation of phylogenetic data using familiar Python/Pandas functions. Finally, phylogenetics for humans!
 
 <img src='docs/_images/jlab.png' align="middle">
@@ -52,6 +55,8 @@ df.to_fasta('new_alignment.fasta', sequence_col='alignment')
 
 ## Contributing
 
+If you have ideas for the project, please share them on the project's [Gitter chat](https://gitter.im/phylopandas/Lobby). 
+
 It's *easy* to create new read/write functions and methods for PhyloPandas. If you 
 have a format you'd like to add, please submit PRs! There are many more formats 
 in Biopython that I haven't had the time to add myself, so please don't be afraid
@@ -59,7 +64,7 @@ to add them! I thank you ahead of time!
 
 ## Testing
 
-PhyloPandas includes a small [pytest]() suite. Run these tests from base directory.
+PhyloPandas includes a small [pytest](https://docs.pytest.org/en/latest/) suite. Run these tests from base directory.
 ```
 $ cd phylopandas
 $ pytest
