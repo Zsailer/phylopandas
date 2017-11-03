@@ -1,5 +1,6 @@
 import os
 import re 
+from functools import wraps
 
 from Bio import SeqIO
 from Bio.Seq import Seq
@@ -116,7 +117,7 @@ def read_blast_xml(filename, **kwargs):
     # Port to DataFrame.
     return DataFrame(data)    
 
-
+@wraps(pd.DataFrame)
 class DataFrame(pd.DataFrame):
     
     def to_fasta(self, filename=None, sequence_col='sequence', id_col='id', id_only=False):
