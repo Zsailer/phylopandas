@@ -123,24 +123,24 @@ class DataFrame(pd.DataFrame):
     
     def to_fasta(self, filename=None, sequence_col='sequence', id_col='id', id_only=False):
         """Write to fasta format."""
-        return _write(self, filename=filename, schema="fasta", id_col=id_col, id_only=id_only)
+        return _write(self, filename=filename, schema="fasta", id_col=id_col, id_only=id_only, sequence_col=sequence_col)
         
     def to_phylip(self, filename=None, sequence_col='sequence', id_col='id'):
         """Write to phylip format."""
-        return _write(self, filename=filename, schema="phylip", id_col=id_col)
+        return _write(self, filename=filename, schema="phylip", id_col=id_col, sequence_col=sequence_col)
 
     def to_clustal(self, filename=None, sequence_col='sequence'):
         """Write to alignment format of Clustal X and Clustal W."""
-        return _write(self, filename=filename, schema="clustal")
+        return _write(self, filename=filename, schema="clustal", sequence_col=sequence_col)
         
     def to_embl(self, alphabet, filename=None, sequence_col='sequence'):
         """Write to the EMBL flat file format."""
-        return _write(self, alphabet=alphabet, filename=filename, schema="embl")
+        return _write(self, alphabet=alphabet, filename=filename, schema="embl", sequence_col=sequence_col)
 
     def to_nexus(self, alphabet, filename=None, sequence_col='sequence'):
         """Write to the NEXUS multiple alignment format."""
-        return _write(self, alphabet=alphabet, filename=filename, schema="nexus")
+        return _write(self, alphabet=alphabet, filename=filename, schema="nexus", sequence_col=sequence_col)
         
     def to_swiss(self, filename=None, sequence_col='sequence'):
         """Write Swiss-Prot aka UniProt format."""
-        return _write(self, filename=filename, schema="swiss")
+        return _write(self, filename=filename, schema="swiss", sequence_col=sequence_col)
