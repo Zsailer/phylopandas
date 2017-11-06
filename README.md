@@ -1,4 +1,4 @@
-# PhyloPandas # 
+<img src="docs/_logo/banner.png">
 
 **Bringing the [Pandas](https://github.com/pandas-dev/pandas) `DataFrame` to phylogenetics.**
 
