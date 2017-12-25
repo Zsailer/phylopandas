@@ -3,6 +3,7 @@ import pandas as pd
 
 # Import Biopython
 from Bio import SeqIO
+from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 import Bio.Alphabet
 
@@ -34,7 +35,7 @@ def _write(dataframe, filename=None, schema='fasta', sequence_col='sequence',
         seq_records.append(record)
 
     # Write to disk or return string
-    if filename is None:
+    if filename is not None:
         SeqIO.write(seq_records, filename, format=schema, **kwargs)
     else:
         return "".join([s.format(schema) for s in seq_records])
