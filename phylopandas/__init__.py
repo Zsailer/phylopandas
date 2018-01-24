@@ -29,4 +29,10 @@ from pandas import *
 from .read import *
 
 # Register new write methods to DataFrame
-from . import write
+try:
+    from . import write
+
+except (ImportError, AttributeError):
+
+    from .legacy import phylopandas_monkeypatch
+    phylopandas_monkeypatch()
