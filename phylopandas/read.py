@@ -68,6 +68,10 @@ def read_swiss(filename, **kwargs):
     return _read(filename, schema='nexus', **kwargs)
 
 
+def read_fastq(filename, **kwargs):
+    """Read FASTQ format."""
+    return _read(filename, schema='fastq', **kwargs)
+
 def read_blast_xml(filename, **kwargs):
     """Read BLAST XML format."""
     # Read file.

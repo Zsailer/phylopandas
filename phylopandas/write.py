@@ -105,3 +105,9 @@ class NexusWriter(BaseWriterAccessor):
 class SwissWriter(BaseWriterAccessor):
     """Swiss Writer"""
     schema = 'swiss'
+
+
+@pd.api.extensions.register_dataframe_accessor('to_fastq')
+class FASTQWriter(BaseWriterAccessor):
+    """FASTQ Writer"""
+    schema = 'fastq'
