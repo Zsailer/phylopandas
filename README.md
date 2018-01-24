@@ -13,54 +13,41 @@ PhyloPandas provides a Pandas-like interface for reading various sequence format
 
 ## How does it work?
 
-Don't worry, we didn't reinvent the wheel. **PhyloPandas** is simply a [DataFrame](https://github.com/pandas-dev/pandas) 
-(great for human-accessible data storage) interface on top of [Biopython](https://github.com/biopython/biopython) (great for parsing/writing sequence data). 
+Don't worry, we didn't reinvent the wheel. **PhyloPandas** is simply a [DataFrame](https://github.com/pandas-dev/pandas)
+(great for human-accessible data storage) interface on top of [Biopython](https://github.com/biopython/biopython) (great for parsing/writing sequence data).
 
-When you import PhyloPandas, you import Pandas with a PhyloPandas flavor. That means, the usual `read_` functions 
-are available ('read_csv', 'read_excel', etc.), but the returned DataFrame includes extra `to_` methods (`to_fasta`, `to_phylip`, etc.) 
+When you import PhyloPandas, you import Pandas with a PhyloPandas flavor. That means, the usual `read_` functions
+are available ('read_csv', 'read_excel', etc.), but the returned DataFrame includes extra `to_` methods (`to_fasta`, `to_phylip`, etc.)
 
 ## Basic Usage
 
-1. Read any format:
+Read in a sequence file.
 ```python
 import phylopandas as pd
 
 df1 = pd.read_fasta('sequences.fasta')
 df2 = pd.read_phylip('sequences.phy')
 ```
-2. Write any format:
+
+Write to various sequence file formats.
+
 ```python
 df1.to_clustal('sequences.clustal')
 ```
-3. Convert formats:
+
+Convert between formats.
+
 ```python
 df = phypd.read_fasta('sequences.fasta')
 df.to_phylip('sequences.phy')
 ```
-4. Merge two **ordered** sequence files (like raw sequence file and its alignment).
-```python
-# Read sequence file into dataframe
-df = pd.read_fasta('sequences.fasta')
-
-# Read alignment into dataframe
-align = pd.read_fasta('alignment.fasta')
-
-# Add alignment using standard pandas functions
-# NOTE: this assumes the alignment and sequence
-#       file are ordered.
-df = df.assign(alignment=align['sequence'])
-```
-5. Write out alignment in last example.
-```python
-df.to_fasta('new_alignment.fasta', sequence_col='alignment')
-``` 
 
 ## Contributing
 
-If you have ideas for the project, please share them on the project's [Gitter chat](https://gitter.im/phylopandas/Lobby). 
+If you have ideas for the project, please share them on the project's [Gitter chat](https://gitter.im/phylopandas/Lobby).
 
-It's *easy* to create new read/write functions and methods for PhyloPandas. If you 
-have a format you'd like to add, please submit PRs! There are many more formats 
+It's *easy* to create new read/write functions and methods for PhyloPandas. If you
+have a format you'd like to add, please submit PRs! There are many more formats
 in Biopython that I haven't had the time to add myself, so please don't be afraid
 to add them! I thank you ahead of time!
 
@@ -89,5 +76,5 @@ pip install -e .
 
 ## Dependencies
 
-* [BioPython](https://github.com/biopython/biopython): Library for managing and manipulating biological data.
-* [Pandas](https://github.com/pandas-dev/pandas): Flexible and powerful data analysis / manipulation library for Python
+- [BioPython](https://github.com/biopython/biopython): Library for managing and manipulating biological data.
+- [Pandas](https://github.com/pandas-dev/pandas): Flexible and powerful data analysis / manipulation library for Python

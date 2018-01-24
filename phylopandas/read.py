@@ -5,7 +5,7 @@ from Bio.Blast import NCBIXML
 import Bio.Alphabet
 
 # Import Phylopandas DataFrame
-from .frame import DataFrame
+from pandas import DataFrame
 
 
 def _read(filename, schema, seq_label='sequence', alphabet=None, **kwargs):
@@ -66,6 +66,11 @@ def read_nexus(filename, **kwargs):
 def read_swiss(filename, **kwargs):
     """Read Swiss-Prot aka UniProt format."""
     return _read(filename, schema='nexus', **kwargs)
+
+
+def read_fastq(filename, **kwargs):
+    """Read FASTQ format."""
+    return _read(filename, schema='fastq', **kwargs)
 
 
 def read_blast_xml(filename, **kwargs):
