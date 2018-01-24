@@ -12,12 +12,12 @@ PhyloPandas provides a Pandas-like interface for reading various sequence format
 
 .. image:: _images/jlab.png
   :align: center
-  
+
 How does it work?
 -----------------
 
-Don't worry, we didn't reinvent the wheel. **PhyloPandas** is simply a DataFrame_ 
-(great for human-accessible data storage) interface on top of Biopython_ (great for parsing/writing sequence data). 
+Don't worry, we didn't reinvent the wheel. **PhyloPandas** is simply a DataFrame_
+(great for human-accessible data storage) interface on top of Biopython_ (great for parsing/writing sequence data).
 
 .. _DataFrame: https://github.com/pandas-dev/pandas
 .. _Biopython: https://github.com/biopython/biopython
@@ -73,8 +73,8 @@ Basic Usage
 Contributing
 ------------
 
-It's *easy* to create new read/write functions and methods for PhyloPandas. If you 
-have a format you'd like to add, please submit PRs! There are many more formats 
+It's *easy* to create new read/write functions and methods for PhyloPandas. If you
+have a format you'd like to add, please submit PRs! There are many more formats
 in Biopython that I haven't had the time to add myself, so please don't be afraid
 to add then yourself! I thank you ahead of time!
 
@@ -87,6 +87,8 @@ Dependencies
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+
+   _pages/cookbook
 
 
 Indices and tables

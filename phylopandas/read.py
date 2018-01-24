@@ -5,7 +5,7 @@ from Bio.Blast import NCBIXML
 import Bio.Alphabet
 
 # Import Phylopandas DataFrame
-from .frame import DataFrame
+from pandas import DataFrame
 
 
 def _read(filename, schema, seq_label='sequence', alphabet=None, **kwargs):

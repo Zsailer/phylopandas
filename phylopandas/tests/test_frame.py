@@ -1,18 +1,17 @@
 import os
 import pytest
-from .. import frame
-from .. import read
+import phylopandas as ph
 from . import path_to_dat, clean_dat
 
 
 def test_read_fasta(path_to_dat):
     # Get path
     path = os.path.join(path_to_dat, 'PF08793_seed.fasta')
-    df = read.read_fasta(path)
+    df = ph.read_fasta(path)
 
     # Tests
     keys = df.keys()
-    assert type(df) == frame.DataFrame
+    assert type(df) == ph.DataFrame
     assert 'id' in keys
     assert 'sequence' in keys
     assert 'description' in keys
@@ -22,11 +21,11 @@ def test_read_fasta(path_to_dat):
 def test_read_clustal(path_to_dat):
     # Get path
     path = os.path.join(path_to_dat, 'PF08793_seed.clustal')
-    df = read.read_clustal(path)
+    df = ph.read_clustal(path)
 
     # Tests
     keys = df.keys()
-    assert type(df) == frame.DataFrame
+    assert type(df) == ph.DataFrame
     assert 'id' in keys
     assert 'sequence' in keys
     assert 'description' in keys
@@ -36,11 +35,11 @@ def test_read_clustal(path_to_dat):
 def test_read_phylip(path_to_dat):
     # Get path
     path = os.path.join(path_to_dat, 'PF08793_seed.phylip')
-    df = read.read_phylip(path)
+    df = ph.read_phylip(path)
 
     # Tests
     keys = df.keys()
-    assert type(df) == frame.DataFrame
+    assert type(df) == ph.DataFrame
     assert 'id' in keys
     assert 'sequence' in keys
     assert 'description' in keys
@@ -52,7 +51,7 @@ class Testframe(object):
     @pytest.mark.usefixtures("clean_dat")
     def test_to_csv(self, path_to_dat):
         path = os.path.join(path_to_dat, 'PF08793_seed.fasta')
-        df = read.read_fasta(path)
+        df = ph.read_fasta(path)
 
         # Write to csv
         csv_path = os.path.join(path_to_dat, 'test.csv')
@@ -62,7 +61,7 @@ class Testframe(object):
     @pytest.mark.usefixtures("clean_dat")
     def test_to_json(self, path_to_dat):
         path = os.path.join(path_to_dat, 'PF08793_seed.fasta')
-        df = read.read_fasta(path)
+        df = ph.read_fasta(path)
 
         # Write to csv
         json_path = os.path.join(path_to_dat, 'test.json')
@@ -72,7 +71,7 @@ class Testframe(object):
     @pytest.mark.usefixtures("clean_dat")
     def test_to_fasta(self, path_to_dat):
         path = os.path.join(path_to_dat, 'PF08793_seed.fasta')
-        df = read.read_fasta(path)
+        df = ph.read_fasta(path)
 
         # Write to csv
         fasta_path = os.path.join(path_to_dat, 'test.fasta')
@@ -82,7 +81,7 @@ class Testframe(object):
     @pytest.mark.usefixtures("clean_dat")
     def test_to_phylip(self, path_to_dat):
         path = os.path.join(path_to_dat, 'PF08793_seed.fasta')
-        df = read.read_fasta(path)
+        df = ph.read_fasta(path)
 
         # Write to csv
         phylip_path = os.path.join(path_to_dat, 'test.phylip')
@@ -92,7 +91,7 @@ class Testframe(object):
     @pytest.mark.usefixtures("clean_dat")
     def test_to_embl(self, path_to_dat):
         path = os.path.join(path_to_dat, 'PF08793_seed.fasta')
-        df = read.read_fasta(path)
+        df = ph.read_fasta(path)
 
         # Write to csv
         embl_path = os.path.join(path_to_dat, 'test.embl')
@@ -102,7 +101,7 @@ class Testframe(object):
     @pytest.mark.usefixtures("clean_dat")
     def test_to_nexus(self, path_to_dat):
         path = os.path.join(path_to_dat, 'PF08793_seed.fasta')
-        df = read.read_fasta(path)
+        df = ph.read_fasta(path)
 
         # Write to csv
         nexus_path = os.path.join(path_to_dat, 'test.nexus')
