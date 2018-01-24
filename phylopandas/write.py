@@ -1,3 +1,7 @@
+__doc__ = """
+Functions for write sequence data to sequence files.
+"""
+
 # Import pandas
 import pandas as pd
 

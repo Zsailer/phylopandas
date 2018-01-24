@@ -1,3 +1,8 @@
+__doc__ = """
+Functions for reading sequence files into pandas DataFrame.
+"""
+
+# Imports
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
