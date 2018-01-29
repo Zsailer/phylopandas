@@ -4,6 +4,8 @@ Functions for write sequence data to sequence files.
 
 # Import pandas
 import pandas as pd
+import pandas_flavor as pf
+
 
 # Import Biopython
 from Bio import SeqIO
@@ -45,25 +47,9 @@ def _write(dataframe, filename=None, schema='fasta', sequence_col='sequence',
         return "".join([s.format(schema) for s in seq_records])
 
 
-class BaseWriterAccessor(object):
-    """Base Accessor for Pandas Writing attributes.
-
-    To create a new writer.
-    """
-    # Defaults
-    schema = 'fasta'
-    id_only = False
-
-    def __init__(self, pandas_obj):
-        self._obj = pandas_obj
-
-    def __call__(self, *args, **kwargs):
-        """""".format(self.__doc__)
-        return _write(self._obj, *args, **kwargs)
-
-
-@pd.api.extensions.register_dataframe_accessor('to_fasta')
-class FastaWriter(BaseWriterAccessor):
+@pf.register_dataframe_method
+def to_fasta(df, filename=None, sequence_col='sequence',
+             id_col='id', id_only=False, alphabet=None, **kwargs):
     """Write to fasta format.
 
     Parameters
@@ -78,40 +64,112 @@ class FastaWriter(BaseWriterAccessor):
     id_only : bool (default=False)
         If True, use only the ID column to label sequences in fasta.
     """
-    schema = 'fasta'
+    return _write(df, filename=filename, schema='fasta',
+                  sequence_col=sequence_col, id_col=id_col, id_only=id_only,
+                  alphabet=None, **kwargs)
 
 
-@pd.api.extensions.register_dataframe_accessor('to_phylip')
-class PhylipWriter(BaseWriterAccessor):
-    """Phylip Writer"""
-    schema = 'phylip'
+@pf.register_dataframe_method
+def to_phylip(df, filename=None, sequence_col='sequence',
+             id_col='id', alphabet=None, **kwargs):
+    """Write to phylip format.
+
+    Parameters
+    ----------
+    filename : str
+        File to write phylip string to. If no filename is given, a fasta string
+        will be returned.
+    sequence_col : str (default='sequence')
+        Sequence column name in DataFrame.
+    """
+    return _write(df, filename=filename, schema='phylip',
+                  sequence_col=sequence_col, id_col=id_col, id_only=True,
+                  alphabet=None, **kwargs)
 
 
-@pd.api.extensions.register_dataframe_accessor('to_clustal')
-class ClustalWriter(BaseWriterAccessor):
-    """Clustal Writer"""
-    schema = 'clustal'
+@pf.register_dataframe_method
+def to_clustal(df, filename=None, sequence_col='sequence',
+             id_col='id', alphabet=None, **kwargs):
+    """Write to CLUSTAL format.
+
+    Parameters
+    ----------
+    filename : str
+        File to write CLUSTAL string to. If no filename is given, a fasta string
+        will be returned.
+    sequence_col : str (default='sequence')
+        Sequence column name in DataFrame.
+    """
+    return _write(df, filename=filename, schema='clustal',
+                  sequence_col=sequence_col, id_col=id_col, id_only=True,
+                  alphabet=None, **kwargs)
+
+@pf.register_dataframe_method
+def to_embl(df, alphabet, filename=None, sequence_col='sequence',
+             id_col='id', **kwargs):
+    """Write to EMBL format.
+
+    Parameters
+    ----------
+    filename : str
+        File to write EMBL string to. If no filename is given, a fasta string
+        will be returned.
+    sequence_col : str (default='sequence')
+        Sequence column name in DataFrame.
+    """
+    return _write(df, filename=filename, schema='embl', sequence_col=sequence_col,
+                  id_col=id_col, id_only=True, alphabet=alphabet, **kwargs)
 
 
-@pd.api.extensions.register_dataframe_accessor('to_embl')
-class EmblWriter(BaseWriterAccessor):
-    """Embl Writer"""
-    schema = 'embl'
+@pf.register_dataframe_method
+def to_nexus(df, alphabet, filename=None, sequence_col='sequence',
+             id_col='id', id_only=False, **kwargs):
+    """Write to NEXUS format.
+
+    Parameters
+    ----------
+    filename : str
+        File to write nexus string to. If no filename is given, a fasta string
+        will be returned.
+    sequence_col : str (default='sequence')
+        Sequence column name in DataFrame.
+    """
+    return _write(df, alphabet=alphabet, filename=filename, schema='nexus',
+                  sequence_col=sequence_col, id_col='id',
+                  id_only=True, **kwargs)
 
 
-@pd.api.extensions.register_dataframe_accessor('to_nexus')
-class NexusWriter(BaseWriterAccessor):
-    """Nexus Writer"""
-    schema = 'nexus'
+@pf.register_dataframe_method
+def to_swiss(df, filename=None, sequence_col='sequence',
+             id_col='id', id_only=False, alphabet=None, **kwargs):
+    """Write to SWISS format.
+
+    Parameters
+    ----------
+    filename : str
+        File to write SWISS string to. If no filename is given, a fasta string
+        will be returned.
+    sequence_col : str (default='sequence')
+        Sequence column name in DataFrame.
+    """
+    return _write(df, alphabet=alphabet, filename=filename, schema='swiss',
+                  sequence_col=sequence_col, id_col='id', id_only=True,
+                  **kwargs)
 
 
-@pd.api.extensions.register_dataframe_accessor('to_swiss')
-class SwissWriter(BaseWriterAccessor):
-    """Swiss Writer"""
-    schema = 'swiss'
+@pf.register_dataframe_method
+def to_fastq(df, filename=None, sequence_col='sequence',
+             id_col='id', id_only=False, alphabet=None, **kwargs):
+    """Write to FASTQ format.
 
-
-@pd.api.extensions.register_dataframe_accessor('to_fastq')
-class FASTQWriter(BaseWriterAccessor):
-    """FASTQ Writer"""
-    schema = 'fastq'
+    Parameters
+    ----------
+    filename : str
+        File to write FASTQ string to. If no filename is given, a fasta string
+        will be returned.
+    sequence_col : str (default='sequence')
+        Sequence column name in DataFrame.
+    """
+    return _write(df, filename=filename, schema='fastq',
+                  sequence_col=sequence_col, id_col='id', id_only=True,
+                  alphabet=None, **kwargs)
