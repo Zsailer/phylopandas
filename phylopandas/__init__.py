@@ -27,12 +27,4 @@ from pandas import *
 
 # Import new read functions
 from .read import *
-
-# Register new write methods to DataFrame
-try:
-    from . import write
-
-except (ImportError, AttributeError):
-
-    from .legacy import phylopandas_monkeypatch
-    phylopandas_monkeypatch()
+from . import write
