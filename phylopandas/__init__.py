@@ -21,10 +21,6 @@ That means, the usual read_ functions are available ('read_csv',
 'read_excel', etc.), but the returned DataFrame includes extra to_ methods
 (to_fasta, to_phylip, etc.)
 """
-
-# If PhyloPandas is imported, all of pandas is imported as well.
-from pandas import *
-
 # Import new read functions
 from .read import *
 from . import write
