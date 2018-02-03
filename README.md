@@ -16,30 +16,34 @@ PhyloPandas provides a Pandas-like interface for reading various sequence format
 Don't worry, we didn't reinvent the wheel. **PhyloPandas** is simply a [DataFrame](https://github.com/pandas-dev/pandas)
 (great for human-accessible data storage) interface on top of [Biopython](https://github.com/biopython/biopython) (great for parsing/writing sequence data).
 
-When you import PhyloPandas, you import Pandas with a PhyloPandas flavor. That means, the usual `read_` functions
-are available ('read_csv', 'read_excel', etc.), but the returned DataFrame includes extra `to_` methods (`to_fasta`, `to_phylip`, etc.)
+PhyloPandas does two things:
+1. It offers new `read` functions to read sequence data directory into a DataFrame.
+2. It attaches a new `phylo` **accessor** to the Pandas DataFrame. This accessor provides writing methods for sequencing data (powered by Biopython).
 
 ## Basic Usage
 
 Read in a sequence file.
 ```python
-import phylopandas as pd
+import phylopandas as ph
 
-df1 = pd.read_fasta('sequences.fasta')
-df2 = pd.read_phylip('sequences.phy')
+df1 = ph.read_fasta('sequences.fasta')
+df2 = ph.read_phylip('sequences.phy')
 ```
 
 Write to various sequence file formats.
 
 ```python
-df1.to_clustal('sequences.clustal')
+df1.phylo.to_clustal('sequences.clustal')
 ```
 
 Convert between formats.
 
 ```python
-df = phypd.read_fasta('sequences.fasta')
-df.to_phylip('sequences.phy')
+# Read a format.
+df = ph.read_fasta('sequences.fasta')
+
+# Write to a different format.
+df.phylo.to_phylip('sequences.phy')
 ```
 
 ## Contributing
@@ -78,3 +82,4 @@ pip install -e .
 
 - [BioPython](https://github.com/biopython/biopython): Library for managing and manipulating biological data.
 - [Pandas](https://github.com/pandas-dev/pandas): Flexible and powerful data analysis / manipulation library for Python
+- [pandas_flavor](https://github.com/Zsailer/pandas_flavor): Flavor pandas objects with new accessors using pandas' new register API (with backwards compatibility). 

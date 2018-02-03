@@ -49,33 +49,13 @@ def test_read_phylip(path_to_dat):
 class Testframe(object):
 
     @pytest.mark.usefixtures("clean_dat")
-    def test_to_csv(self, path_to_dat):
-        path = os.path.join(path_to_dat, 'PF08793_seed.fasta')
-        df = ph.read_fasta(path)
-
-        # Write to csv
-        csv_path = os.path.join(path_to_dat, 'test.csv')
-        df.to_csv(csv_path)
-        assert os.path.exists(csv_path)
-
-    @pytest.mark.usefixtures("clean_dat")
-    def test_to_json(self, path_to_dat):
-        path = os.path.join(path_to_dat, 'PF08793_seed.fasta')
-        df = ph.read_fasta(path)
-
-        # Write to csv
-        json_path = os.path.join(path_to_dat, 'test.json')
-        df.to_json(json_path)
-        assert os.path.exists(json_path)
-
-    @pytest.mark.usefixtures("clean_dat")
     def test_to_fasta(self, path_to_dat):
         path = os.path.join(path_to_dat, 'PF08793_seed.fasta')
         df = ph.read_fasta(path)
-
-        # Write to csv
+        print(df.phylo)
+        # Write to fasta
         fasta_path = os.path.join(path_to_dat, 'test.fasta')
-        df.to_fasta(fasta_path)
+        df.phylo.to_fasta(fasta_path)
         assert os.path.exists(fasta_path)
 
     @pytest.mark.usefixtures("clean_dat")
@@ -85,7 +65,7 @@ class Testframe(object):
 
         # Write to csv
         phylip_path = os.path.join(path_to_dat, 'test.phylip')
-        df.to_phylip(phylip_path)
+        df.phylo.to_phylip(phylip_path)
         assert os.path.exists(phylip_path)
 
     @pytest.mark.usefixtures("clean_dat")
@@ -95,7 +75,7 @@ class Testframe(object):
 
         # Write to csv
         embl_path = os.path.join(path_to_dat, 'test.embl')
-        df.to_embl(alphabet='protein', filename=embl_path)
+        df.phylo.to_embl(alphabet='protein', filename=embl_path)
         assert os.path.exists(embl_path)
 
     @pytest.mark.usefixtures("clean_dat")
@@ -105,5 +85,5 @@ class Testframe(object):
 
         # Write to csv
         nexus_path = os.path.join(path_to_dat, 'test.nexus')
-        df.to_nexus(alphabet='protein', filename=nexus_path)
+        df.phylo.to_nexus(alphabet='protein', filename=nexus_path)
         assert os.path.exists(nexus_path)
