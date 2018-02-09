@@ -31,7 +31,7 @@ def _doc_template(schema):
     return doc
 
 
-def _read(filename=None, data=None, schmema=None, add_node_labels=True):
+def _read(filename=None, data=None, schema=None, add_node_labels=True):
     """Read a phylogenetic tree into a phylopandas.DataFrame.
 
     The resulting DataFrame has the following columns:
@@ -128,18 +128,21 @@ def read_newick(filename=None,
                 data=None,
                 add_node_labels=True):
     __doc__ = _doc_template('newick')
-    return _read(filename=filename, data=data, add_node_labels=True)
+    return _read(filename=filename, data=data, schema='newick',
+                 add_node_labels=True)
 
 
 def read_nexus(filename=None,
                data=None,
                add_node_labels=True):
     __doc__ = _doc_template('nexus')
-    return _read(filename=filename, data=data, add_node_labels=True)
+    return _read(filename=filename, data=data, schema='nexus',
+                 add_node_labels=True)
 
 
 def read_nexml(filename=None,
                data=None,
                add_node_labels=True):
     __doc__ = _doc_template('nexml')
-    return _read(filename=filename, data=data, add_node_labels=True)
+    return _read(filename=filename, data=data, schema='nexml',
+                 add_node_labels=True)
