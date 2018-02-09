@@ -82,4 +82,4 @@ pip install -e .
 
 - [BioPython](https://github.com/biopython/biopython): Library for managing and manipulating biological data.
 - [Pandas](https://github.com/pandas-dev/pandas): Flexible and powerful data analysis / manipulation library for Python
-- [pandas_flavor](https://github.com/Zsailer/pandas_flavor): Flavor pandas objects with new accessors using pandas' new register API (with backwards compatibility). 
+- [pandas_flavor](https://github.com/Zsailer/pandas_flavor): Flavor pandas objects with new accessors using pandas' new register API (with backwards compatibility).
