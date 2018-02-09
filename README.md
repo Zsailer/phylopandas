@@ -14,7 +14,7 @@ PhyloPandas provides a Pandas-like interface for reading sequence and phylogenet
 ## How does it work?
 
 Don't worry, we didn't reinvent the wheel. **PhyloPandas** is simply a [DataFrame](https://github.com/pandas-dev/pandas)
-(great for human-accessible data storage) interface on top of [Biopython](https://github.com/biopython/biopython) (great for parsing/writing sequence data) and [DendroPy](https://pythonhosted.org/DendroPy/index.html) (great for reading tree data).
+(great for human-accessible data storage) interface on top of [Biopython](https://github.com/biopython/biopython) (great for parsing/writing sequence data) and [DendroPy](https://github.com/jeetsukumaran/DendroPy) (great for reading tree data).
 
 PhyloPandas does two things:
 1. It offers new `read` functions to read sequence/tree data directly into a DataFrame.
@@ -104,5 +104,6 @@ pip install -e .
 ## Dependencies
 
 - [BioPython](https://github.com/biopython/biopython): Library for managing and manipulating biological data.
+- [DendroPy](https://github.com/jeetsukumaran/DendroPy): Library for phylogenetic scripting, simulation, data processing and manipulation
 - [Pandas](https://github.com/pandas-dev/pandas): Flexible and powerful data analysis / manipulation library for Python
 - [pandas_flavor](https://github.com/Zsailer/pandas_flavor): Flavor pandas objects with new accessors using pandas' new register API (with backwards compatibility).
