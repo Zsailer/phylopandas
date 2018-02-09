@@ -7,20 +7,22 @@
 **Bringing the [Pandas](https://github.com/pandas-dev/pandas) `DataFrame` to phylogenetics.**
 
 
-PhyloPandas provides a Pandas-like interface for reading various sequence formats into DataFrames. This enables easy manipulation of phylogenetic data using familiar Python/Pandas functions. Finally, phylogenetics for humans!
+PhyloPandas provides a Pandas-like interface for reading sequence and phylogenetic tree data into pandas DataFrames. This enables easy manipulation of phylogenetic data using familiar Python/Pandas functions. Finally, phylogenetics for humans!
 
 <img src='docs/_images/jlab.png' align="middle">
 
 ## How does it work?
 
 Don't worry, we didn't reinvent the wheel. **PhyloPandas** is simply a [DataFrame](https://github.com/pandas-dev/pandas)
-(great for human-accessible data storage) interface on top of [Biopython](https://github.com/biopython/biopython) (great for parsing/writing sequence data).
+(great for human-accessible data storage) interface on top of [Biopython](https://github.com/biopython/biopython) (great for parsing/writing sequence data) and [DendroPy](https://github.com/jeetsukumaran/DendroPy) (great for reading tree data).
 
 PhyloPandas does two things:
-1. It offers new `read` functions to read sequence data directory into a DataFrame.
-2. It attaches a new `phylo` **accessor** to the Pandas DataFrame. This accessor provides writing methods for sequencing data (powered by Biopython).
+1. It offers new `read` functions to read sequence/tree data directly into a DataFrame.
+2. It attaches a new `phylo` **accessor** to the Pandas DataFrame. This accessor provides writing methods for sequencing/tree data (powered by Biopython and dendropy).
 
 ## Basic Usage
+
+**Sequence data:**
 
 Read in a sequence file.
 ```python
@@ -45,6 +47,27 @@ df = ph.read_fasta('sequences.fasta')
 # Write to a different format.
 df.phylo.to_phylip('sequences.phy')
 ```
+
+**Tree data:**
+
+Read newick tree data
+```python
+df = ph.read_newick('tree.newick')
+```
+
+Plot newick data (using [phylovega]()).
+```python
+# Import PhyloVega.
+from phylovega import VegaTree
+
+# Initialize a Vega Tree object.
+vt = VegaTree(df)
+
+# Display the tree.
+vt.display()
+```
+
+<img src='docs/_images/tree.png' align="middle" height="200">
 
 ## Contributing
 
@@ -81,5 +104,6 @@ pip install -e .
 ## Dependencies
 
 - [BioPython](https://github.com/biopython/biopython): Library for managing and manipulating biological data.
+- [DendroPy](https://github.com/jeetsukumaran/DendroPy): Library for phylogenetic scripting, simulation, data processing and manipulation
 - [Pandas](https://github.com/pandas-dev/pandas): Flexible and powerful data analysis / manipulation library for Python
-- [pandas_flavor](https://github.com/Zsailer/pandas_flavor): Flavor pandas objects with new accessors using pandas' new register API (with backwards compatibility). 
+- [pandas_flavor](https://github.com/Zsailer/pandas_flavor): Flavor pandas objects with new accessors using pandas' new register API (with backwards compatibility).

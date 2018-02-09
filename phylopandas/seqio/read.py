@@ -16,6 +16,12 @@ from pandas import DataFrame
 def _read(filename, schema, seq_label='sequence', alphabet=None, **kwargs):
     """Use BioPython's sequence parsing module to convert any file format to
     a Pandas DataFrame.
+
+    The resulting DataFrame has the following columns:
+        - name
+        - id
+        - description
+        - sequence
     """
     # Check Alphabet if given
     if alphabet is None:

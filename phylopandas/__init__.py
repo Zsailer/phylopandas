@@ -22,5 +22,9 @@ That means, the usual read_ functions are available ('read_csv',
 (to_fasta, to_phylip, etc.)
 """
 # Import new read functions
-from .read import *
-from . import write
+from pandas import DataFrame
+
+# Register PhyloPandas Methods
+from .core import PhyloPandasMethods as _
+from .seqio import *
+from .treeio import *
