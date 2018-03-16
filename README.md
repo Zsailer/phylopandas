@@ -55,7 +55,7 @@ Read newick tree data
 df = ph.read_newick('tree.newick')
 ```
 
-Plot newick data (using [phylovega]()).
+Plot newick data (using [phylovega](https://github.com/Zsailer/phylovega)).
 ```python
 # Import PhyloVega.
 from phylovega import VegaTree
