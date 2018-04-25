@@ -1,11 +1,14 @@
 __doc__ = """
 Functions for write sequence data to sequence files.
 """
+import pandas as pd
+
 # Import Biopython
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 import Bio.Alphabet
+
 
 def _seqio_doc_template(schema):
     s = """Write to {} format.
@@ -20,19 +23,49 @@ def _seqio_doc_template(schema):
     """.format(schema, schema)
     return s
 
-def _write(dataframe, filename=None, schema='fasta', sequence_col='sequence',
-           id_col='id', id_only=False, alphabet=None, **kwargs):
-    """Write a PhyloPandas DataFrame to a sequence file.
+
+def _pandas_series_to_biopython_record(
+    series,
+    id_col='id',
+    id_only=False,
+    sequence_col='sequence'):
+    """
+    """
+    seq = Seq(series[sequence_col], alphabet)
+    # Create a SeqRecord and append to list.
+    if id_only:
+        record = SeqRecord(seq, id=series[id_col], name='',
+                           description='')
+
+    else:
+        record = SeqRecord(seq, id=series[id_col], name=series['name'],
+                           description=series['description'])
+    return record
+
+
+def _write(
+    data,
+    filename=None,
+    schema='fasta',
+    sequence_col='sequence',
+    id_col='id',
+    id_only=False,
+    alphabet=None,
+    **kwargs):
+    """General write function. Write phylopanda data to biopython format.
 
     Parameters
     ----------
     filename : str
-        File to write fasta string to. If no filename is given, a fasta string
+        File to write string to. If no filename is given, a string
         will be returned.
+
     sequence_col : str (default='sequence')
         Sequence column name in DataFrame.
+
     id_col : str (default='id')
         ID column name in DataFrame
+
     id_only : bool (default=False)
         If True, use only the ID column to label sequences in fasta.
     """
@@ -48,18 +81,27 @@ def _write(dataframe, filename=None, schema='fasta', sequence_col='sequence',
             "The alphabet is not recognized. Must be 'dna', 'rna', "
             "'nucleotide', or 'protein'.")
 
-    # Iterate through dataframe rows
     seq_records = []
-    for i, row in dataframe.iterrows():
-        seq = Seq(row[sequence_col], alphabet)
-        # Create a SeqRecord and append to list.
-        if id_only:
-            record = SeqRecord(seq, id=row[id_col], name='', description='')
 
-        else:
-            record = SeqRecord(seq, id=row[id_col], name=row['name'],
-                               description=row['description'])
+    # Build a list of records from a pandas DataFrame
+    if type(data) is pd.DataFrame:
+        for i, row in data.iterrows():
+            record = _pandas_series_to_biopython_record(
+                row,
+                id_col=id_col,
+                id_only=id_only,
+                sequence_col=sequence_col
+            )
+            seq_records.append(record)
 
+    # Build a record from a pandas Series
+    elif type(data) is pd.Series:
+        record = _pandas_series_to_biopython_record(
+            row,
+            id_col=id_col,
+            id_only=id_only,
+            sequence_col=sequence_col
+        )
         seq_records.append(record)
 
     # Write to disk or return string
