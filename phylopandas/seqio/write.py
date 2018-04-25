@@ -28,7 +28,8 @@ def _pandas_series_to_biopython_record(
     series,
     id_col='id',
     id_only=False,
-    sequence_col='sequence'):
+    sequence_col='sequence',
+    alphabet=None):
     """
     """
     seq = Seq(series[sequence_col], alphabet)
@@ -90,7 +91,8 @@ def _write(
                 row,
                 id_col=id_col,
                 id_only=id_only,
-                sequence_col=sequence_col
+                sequence_col=sequence_col,
+                alphabet=alphabet
             )
             seq_records.append(record)
 
@@ -100,7 +102,8 @@ def _write(
             row,
             id_col=id_col,
             id_only=id_only,
-            sequence_col=sequence_col
+            sequence_col=sequence_col,
+            alphabet=alphabet
         )
         seq_records.append(record)
 
