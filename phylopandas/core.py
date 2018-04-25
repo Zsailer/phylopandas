@@ -2,6 +2,7 @@
 from pandas_flavor import register_dataframe_accessor, register_series_accessor
 
 from functools import wraps
+from .seqio.write import _write_method
 from . import seqio
 from . import treeio
 
@@ -24,33 +25,17 @@ class PhyloPandasSeriesMethods(object):
     def __init__(self, data):
         self._data = data
 
-    @wraps(seqio.write.to_fasta)
-    def to_fasta(self, *args, **kwargs):
-        return seqio.write.to_fasta(self._data, *args, **kwargs)
+    # -----------------------------------------------------------
+    # Extra read/write methods.
+    # -----------------------------------------------------------
 
-    @wraps(seqio.write.to_phylip)
-    def to_phylip(self, *args, **kwargs):
-        return seqio.write.to_phylip(self._data, *args, **kwargs)
-
-    @wraps(seqio.write.to_clustal)
-    def to_clustal(self, *args, **kwargs):
-        return seqio.write.to_clustal(self._data, *args, **kwargs)
-
-    @wraps(seqio.write.to_embl)
-    def to_embl(self, *args, **kwargs):
-        return seqio.write.to_embl(self._data, *args, **kwargs)
-
-    @wraps(seqio.write.to_swiss)
-    def to_swiss(self, *args, **kwargs):
-        return seqio.write.to_swiss(self._data, *args, **kwargs)
-
-    @wraps(seqio.write.to_nexus)
-    def to_nexus(self, *args, **kwargs):
-        return seqio.write.to_nexus(self._data, *args, **kwargs)
-
-    @wraps(seqio.write.to_fastq)
-    def to_fastq(self, *args, **kwargs):
-        return seqio.write.to_fastq(self._data, *args, **kwargs)
+    to_fasta = _write_method('fasta')
+    to_phylip = _write_method('phylip')
+    to_clustal = _write_method('clustal')
+    to_embl = _write_method('embl')
+    to_nexus = _write_method('nexus')
+    to_swiss = _write_method('swiss')
+    to_fastq = _write_method('fastq')
 
 
 @register_dataframe_accessor('phylo')
@@ -67,33 +52,13 @@ class PhyloPandasDataFrameMethods(object):
     # Extra read/write methods.
     # -----------------------------------------------------------
 
-    @wraps(seqio.write.to_fasta)
-    def to_fasta(self, *args, **kwargs):
-        return seqio.write.to_fasta(self._data, *args, **kwargs)
-
-    @wraps(seqio.write.to_phylip)
-    def to_phylip(self, *args, **kwargs):
-        return seqio.write.to_phylip(self._data, *args, **kwargs)
-
-    @wraps(seqio.write.to_clustal)
-    def to_clustal(self, *args, **kwargs):
-        return seqio.write.to_clustal(self._data, *args, **kwargs)
-
-    @wraps(seqio.write.to_embl)
-    def to_embl(self, *args, **kwargs):
-        return seqio.write.to_embl(self._data, *args, **kwargs)
-
-    @wraps(seqio.write.to_swiss)
-    def to_swiss(self, *args, **kwargs):
-        return seqio.write.to_swiss(self._data, *args, **kwargs)
-
-    @wraps(seqio.write.to_nexus)
-    def to_nexus(self, *args, **kwargs):
-        return seqio.write.to_nexus(self._data, *args, **kwargs)
-
-    @wraps(seqio.write.to_fastq)
-    def to_fastq(self, *args, **kwargs):
-        return seqio.write.to_fastq(self._data, *args, **kwargs)
+    to_fasta = _write_method('fasta')
+    to_phylip = _write_method('phylip')
+    to_clustal = _write_method('clustal')
+    to_embl = _write_method('embl')
+    to_nexus = _write_method('nexus')
+    to_swiss = _write_method('swiss')
+    to_fastq = _write_method('fastq')
 
     # -----------------------------------------------------------
     # Useful dataframe methods specific to sequencing data.
