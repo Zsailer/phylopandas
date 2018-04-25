@@ -10,7 +10,7 @@ from Bio.Blast import NCBIXML
 import Bio.Alphabet
 
 # Import Phylopandas DataFrame
-from pandas import DataFrame
+import pandas as pd
 
 
 def _read(filename, schema, seq_label='sequence', alphabet=None, **kwargs):
@@ -46,42 +46,49 @@ def _read(filename, schema, seq_label='sequence', alphabet=None, **kwargs):
         data['name'].append(s.name)
 
     # Port to DataFrame.
-    return DataFrame(data)
+    return data
 
 
 def read_fasta(filename, **kwargs):
     """Read fasta format."""
-    return _read(filename, schema='fasta', **kwargs)
+    data = _read(filename, schema='fasta', **kwargs)
+    return pd.DataFrame(data)
 
 
 def read_phylip(filename, **kwargs):
     """Read phylip format."""
-    return _read(filename, schema='phylip', **kwargs)
+    data = _read(filename, schema='phylip', **kwargs)
+    return pd.DataFrame(data)
 
 
 def read_clustal(filename, **kwargs):
     """Read clustal format."""
-    return _read(filename, schema='clustal', **kwargs)
+    data = _read(filename, schema='clustal', **kwargs)
+    return pd.DataFrame(data)
 
 
 def read_embl(filename, **kwargs):
     """Read the EMBL flat file format."""
-    return _read(filename, schema='embl', **kwargs)
+    data = _read(filename, schema='embl', **kwargs)
+    return pd.DataFrame(data)
 
 
 def read_nexus(filename, **kwargs):
     """Read the EMBL flat file format."""
-    return _read(filename, schema='nexus', **kwargs)
+    data = _read(filename, schema='nexus', **kwargs)
+    return pd.DataFrame(data)
 
 
 def read_swiss(filename, **kwargs):
     """Read Swiss-Prot aka UniProt format."""
-    return _read(filename, schema='nexus', **kwargs)
+    data = _read(filename, schema='nexus', **kwargs)
+    return pd.DataFrame(data)
 
 
 def read_fastq(filename, **kwargs):
     """Read FASTQ format."""
-    return _read(filename, schema='fastq', **kwargs)
+    data = _read(filename, schema='fastq', **kwargs)
+    return pd.DataFrame(data)
 
 
 def read_blast_xml(filename, **kwargs):
@@ -110,4 +117,4 @@ def read_blast_xml(filename, **kwargs):
         data['sequence'] = s.hsps[0].sbjct
 
     # Port to DataFrame.
-    return DataFrame(data)
+    return pd.DataFrame(data)

@@ -25,6 +25,7 @@ That means, the usual read_ functions are available ('read_csv',
 from pandas import DataFrame
 
 # Register PhyloPandas Methods
-from .core import PhyloPandasMethods as _
+from .core import PhyloPandasDataFrameMethods as _PhyloPandasDataFrameMethods
+from .core import PhyloPandasSeriesMethods as _PhyloPandasSeriesMethods
 from .seqio import *
 from .treeio import *
