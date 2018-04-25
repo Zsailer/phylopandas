@@ -7,17 +7,6 @@ from . import seqio
 from . import treeio
 
 
-def verify_phylopandas_function(f):
-    """"""
-    @wraps(f)
-    def inner(data, *args, **kwargs):
-        # Sanity check.
-        if not hasattr(data, 'phylo'):
-            raise Exception("Object is not a PhyloPandas dataframe.")
-        return f(args, kwargs)
-    return inner
-
-
 @register_series_accessor('phylo')
 class PhyloPandasSeriesMethods(object):
     """
