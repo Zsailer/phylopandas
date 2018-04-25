@@ -13,7 +13,32 @@ import Bio.Alphabet
 import pandas as pd
 
 
-def _read(filename, schema, seq_label='sequence', alphabet=None, **kwargs):
+def _read_doc_template(schema):
+    s = """Read a {} file.
+
+    Construct a PhyloPandas DataFrame with columns:
+        - name
+        - id
+        - description
+        - sequence
+
+    Parameters
+    ----------
+    filename : str
+        File name of {} file. 
+
+    seq_label : str (default='sequence')
+        Sequence column name in DataFrame.
+    """.format(schema, schema, schema)
+    return s
+
+
+def _read(
+    filename,
+    schema,
+    seq_label='sequence',
+    alphabet=None,
+    **kwargs):
     """Use BioPython's sequence parsing module to convert any file format to
     a Pandas DataFrame.
 
@@ -26,8 +51,10 @@ def _read(filename, schema, seq_label='sequence', alphabet=None, **kwargs):
     # Check Alphabet if given
     if alphabet is None:
         alphabet = Bio.Alphabet.Alphabet()
+
     elif alphabet in ['dna', 'rna', 'protein', 'nucleotide']:
         alphabet = getattr(Bio.Alphabet, 'generic_{}'.format(alphabet))
+
     else:
         raise Exception(
             "The alphabet is not recognized. Must be 'dna', 'rna', "
@@ -46,49 +73,36 @@ def _read(filename, schema, seq_label='sequence', alphabet=None, **kwargs):
         data['name'].append(s.name)
 
     # Port to DataFrame.
-    return data
-
-
-def read_fasta(filename, **kwargs):
-    """Read fasta format."""
-    data = _read(filename, schema='fasta', **kwargs)
     return pd.DataFrame(data)
 
+def _read_function(schema):
+    """Add a write method for named schema to a class.
+    """
+    def func(
+        filename,
+        seq_label='sequence',
+        alphabet=None,
+        **kwargs):
+        # Use generic write class to write data.
+        return _read(
+            filename=filename,
+            schema=schema,
+            seq_label=seq_label,
+            alphabet=alphabet,
+            **kwargs
+        )
+    # Update docs
+    func.__doc__ = _read_doc_template(schema)
+    return func
 
-def read_phylip(filename, **kwargs):
-    """Read phylip format."""
-    data = _read(filename, schema='phylip', **kwargs)
-    return pd.DataFrame(data)
-
-
-def read_clustal(filename, **kwargs):
-    """Read clustal format."""
-    data = _read(filename, schema='clustal', **kwargs)
-    return pd.DataFrame(data)
-
-
-def read_embl(filename, **kwargs):
-    """Read the EMBL flat file format."""
-    data = _read(filename, schema='embl', **kwargs)
-    return pd.DataFrame(data)
-
-
-def read_nexus(filename, **kwargs):
-    """Read the EMBL flat file format."""
-    data = _read(filename, schema='nexus', **kwargs)
-    return pd.DataFrame(data)
-
-
-def read_swiss(filename, **kwargs):
-    """Read Swiss-Prot aka UniProt format."""
-    data = _read(filename, schema='nexus', **kwargs)
-    return pd.DataFrame(data)
-
-
-def read_fastq(filename, **kwargs):
-    """Read FASTQ format."""
-    data = _read(filename, schema='fastq', **kwargs)
-    return pd.DataFrame(data)
+# Various read functions to various formats.
+read_fasta = _read_function('fasta')
+read_phylip = _read_function('phylip')
+read_clustal = _read_function('clustal')
+read_embl = _read_function('embl')
+read_nexus = _read_function('nexus')
+read_swiss = _read_function('swiss')
+read_fastq = _read_function('fastq')
 
 
 def read_blast_xml(filename, **kwargs):

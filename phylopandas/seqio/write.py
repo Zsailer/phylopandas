@@ -10,17 +10,24 @@ from Bio.SeqRecord import SeqRecord
 import Bio.Alphabet
 
 
-def _seqio_doc_template(schema):
+def _write_doc_template(schema):
     s = """Write to {} format.
 
     Parameters
     ----------
     filename : str
-        File to write {} string to. If no filename is given, a fasta string
+        File to write {} string to. If no filename is given, a {} string
         will be returned.
+
     sequence_col : str (default='sequence')
         Sequence column name in DataFrame.
-    """.format(schema, schema)
+
+    id_col : str (default='id')
+        ID column name in DataFrame
+
+    id_only : bool (default=False)
+        If True, use only the ID column to label sequences in fasta.
+    """.format(schema, schema, schema)
     return s
 
 
@@ -114,69 +121,65 @@ def _write(
     else:
         return "".join([s.format(schema) for s in seq_records])
 
-
-def to_fasta(df, filename=None, sequence_col='sequence',
-             id_col='id', id_only=False, alphabet=None, **kwargs):
-    """Write to fasta format.
-
-    Parameters
-    ----------
-    filename : str
-        File to write fasta string to. If no filename is given, a fasta string
-        will be returned.
-    sequence_col : str (default='sequence')
-        Sequence column name in DataFrame.
-    id_col : str (default='id')
-        ID column name in DataFrame
-    id_only : bool (default=False)
-        If True, use only the ID column to label sequences in fasta.
+def _write_method(schema):
+    """Add a write method for named schema to a class.
     """
-    return _write(df, filename=filename, schema='fasta',
-                  sequence_col=sequence_col, id_col=id_col, id_only=id_only,
-                  alphabet=None, **kwargs)
+    def method(
+        self,
+        filename=None,
+        sequence_col='sequence',
+        id_col='id',
+        id_only=False,
+        alphabet=None,
+        **kwargs):
+        # Use generic write class to write data.
+        return _write(
+            self._data,
+            filename=filename,
+            schema=schema,
+            sequence_col=sequence_col,
+            id_col=id_col,
+            id_only=id_only,
+            alphabet=alphabet,
+            **kwargs
+        )
+    # Update docs
+    method.__doc__ = _write_doc_template(schema)
+    return method
 
 
-def to_phylip(df, filename=None, sequence_col='sequence',
-             id_col='id', alphabet=None, **kwargs):
-    __doc__ = _seqio_doc_template('phylip')
-    return _write(df, filename=filename, schema='phylip',
-                  sequence_col=sequence_col, id_col=id_col, id_only=True,
-                  alphabet=None, **kwargs)
+def _write_function(schema):
+    """Add a write method for named schema to a class.
+    """
+    def func(
+        data,
+        filename=None,
+        sequence_col='sequence',
+        id_col='id',
+        id_only=False,
+        alphabet=None,
+        **kwargs):
+        # Use generic write class to write data.
+        return _write(
+            data,
+            filename=filename,
+            schema=schema,
+            sequence_col=sequence_col,
+            id_col=id_col,
+            id_only=id_only,
+            alphabet=alphabet,
+            **kwargs
+        )
+    # Update docs
+    func.__doc__ = _write_doc_template(schema)
+    return func
 
 
-def to_clustal(df, filename=None, sequence_col='sequence',
-             id_col='id', alphabet=None, **kwargs):
-    __doc__ = _seqio_doc_template('clustal')
-    return _write(df, filename=filename, schema='clustal',
-                  sequence_col=sequence_col, id_col=id_col, id_only=True,
-                  alphabet=None, **kwargs)
-
-def to_embl(df, alphabet, filename=None, sequence_col='sequence',
-             id_col='id', **kwargs):
-    __doc__ = _seqio_doc_template('embl')
-    return _write(df, filename=filename, schema='embl', sequence_col=sequence_col,
-                  id_col=id_col, id_only=True, alphabet=alphabet, **kwargs)
-
-
-def to_nexus(df, alphabet, filename=None, sequence_col='sequence',
-             id_col='id', id_only=False, **kwargs):
-    __doc__ = _seqio_doc_template('nexus')
-    return _write(df, alphabet=alphabet, filename=filename, schema='nexus',
-                  sequence_col=sequence_col, id_col='id',
-                  id_only=True, **kwargs)
-
-
-def to_swiss(df, filename=None, sequence_col='sequence',
-             id_col='id', id_only=False, alphabet=None, **kwargs):
-    __doc__ = _seqio_doc_template('swiss')
-    return _write(df, alphabet=alphabet, filename=filename, schema='swiss',
-                  sequence_col=sequence_col, id_col='id', id_only=True,
-                  **kwargs)
-
-
-def to_fastq(df, filename=None, sequence_col='sequence',
-             id_col='id', id_only=False, alphabet=None, **kwargs):
-    __doc__ = _seqio_doc_template('fastq')
-    return _write(df, filename=filename, schema='fastq',
-                  sequence_col=sequence_col, id_col='id', id_only=True,
-                  alphabet=None, **kwargs)
+# Write functions to various formats.
+to_fasta = _write_function('fasta')
+to_phylip = _write_function('phylip')
+to_clustal = _write_function('clustal')
+to_embl = _write_function('embl')
+to_nexus = _write_function('nexus')
+to_swiss = _write_function('swiss')
+to_fastq = _write_function('fastq')
