@@ -120,16 +120,16 @@ class PhyloPandasDataFrameMethods(object):
         column_idx.update({k: None for k in other.columns})
         column_idx = list(column_idx.keys())
 
-        df0 = self._data
-        df1 = other
+        df0 = self._data.copy()
+        df1 = other.copy()
 
         # Save index as column in df
         df0['index'] = df0.index
         df1['index'] = df1.index
 
         # Set index to whatever column is given
-        df0.set_index(on, inplace=True, drop=False)
-        df1.set_index(on, inplace=True, drop=False)
+        df0 = df0.set_index(on, inplace=False, drop=False)
+        df1 = df1.set_index(on, inplace=False, drop=False)
 
         # Write out both dataframes to dictionaries
         data0 = df0.to_dict(orient="index")
@@ -145,9 +145,8 @@ class PhyloPandasDataFrameMethods(object):
         df = pd.DataFrame(data0).T
 
         # Reset index
-        df.set_index('index', inplace=True, drop=True)
+        df = df.set_index('index', inplace=False, drop=True)
         df.index.name = None
 
         # Store dataframe (maintaining original order)
-        self._data = df[column_idx]
-        return self._data
+        return df[column_idx]
