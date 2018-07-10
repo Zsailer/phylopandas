@@ -37,7 +37,7 @@ def _pandas_series_to_biopython_record(
     id_only=False,
     sequence_col='sequence',
     alphabet=None):
-    """
+    """Convert a Pandas series to a BioPython sequence record.
     """
     seq = Seq(series[sequence_col], alphabet)
     # Create a SeqRecord and append to list.

@@ -69,6 +69,11 @@ class PhyloPandasDataFrameMethods(object):
     to_fastq = seqio.write._write_method('fastq')
     to_fasta_twoline = seqio.write._write_method('fasta-2line')
 
+
+    # Tree file reading methods.
+    to_newick = treeio.write._write_method('newick')
+
+
     # -----------------------------------------------------------
     # Useful dataframe methods specific to sequencing data.
     # -----------------------------------------------------------
