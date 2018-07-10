@@ -46,7 +46,7 @@ def _pandas_series_to_biopython_record(
                            description='')
 
     else:
-        record = SeqRecord(seq, id=series[id_col], name=series['name'],
+        record = SeqRecord(seq, id=series[id_col], name=series['label'],
                            description=series['description'])
     return record
 

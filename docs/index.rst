@@ -71,6 +71,7 @@ Table of Contents
 .. toctree::
    :maxdepth: 1
 
+   _pages/dataframe
    _pages/cookbook
 
 

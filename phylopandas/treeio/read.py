@@ -1,7 +1,8 @@
 import pandas
 import dendropy
+from ..utils import get_random_id
 
-def _doc_template(schema):
+def _read_doc_template(schema):
     doc = """
     Read a {} tree into a phylopandas.DataFrame.
 
@@ -59,9 +60,15 @@ def _read(filename=None, data=None, schema=None, add_node_labels=True):
     """
     if filename is not None:
         # Use Dendropy to parse tree.
-        tree = dendropy.Tree.get(path=filename, schema=schema)
+        tree = dendropy.Tree.get(
+            path=filename,
+            schema=schema,
+            preserve_underscores=True)
     elif data is not None:
-        tree = dendropy.Tree.get(data=data, schema=schema)
+        tree = dendropy.Tree.get(
+            data=data,
+            schema=schema,
+            preserve_underscores=True)
     else:
         raise Exception('No tree given?')
 
@@ -69,6 +76,7 @@ def _read(filename=None, data=None, schema=None, add_node_labels=True):
     tree.max_distance_from_root()
 
     # Initialize the data object.
+    idx = []
     data = {'type':[],
             'id':[],
             'parent':[],
@@ -85,7 +93,7 @@ def _read(filename=None, data=None, schema=None, add_node_labels=True):
         # Get node type
         if node.is_leaf():
             type_ = 'leaf'
-            label = str(node.taxon.label)
+            label = str(node.taxon.label).replace(' ', '_')
         elif node.is_internal():
             type_ = 'node'
             label = str(node.label)
@@ -112,6 +120,7 @@ def _read(filename=None, data=None, schema=None, add_node_labels=True):
             raise Exception("Subtree is not attached to tree?")
 
         # Add this node to the data.
+        idx.append(get_random_id(10))
         data['type'].append(type_)
         data['id'].append(id_)
         data['parent'].append(parent_label)
@@ -120,29 +129,56 @@ def _read(filename=None, data=None, schema=None, add_node_labels=True):
         data['distance'].append(distance)
 
     # Construct dataframe.
-    df = pandas.DataFrame(data)
+    df = pandas.DataFrame(data, index=idx)
     return df
 
 
-def read_newick(filename=None,
-                data=None,
-                add_node_labels=True):
-    __doc__ = _doc_template('newick')
-    return _read(filename=filename, data=data, schema='newick',
-                 add_node_labels=True)
+def _read_method(schema):
+    """Add a write method for named schema to a class.
+    """
+    def func(
+        self,
+        filename=None,
+        data=None,
+        add_node_labels=True,
+        **kwargs):
+        # Use generic write class to write data.
+        df0 = self._data
+        df1 = _read(
+            filename=filename,
+            data=data,
+            schema=schema,
+            add_node_labels=add_node_labels,
+            **kwargs
+        )
+        return df0.phylo.combine(df1, on=on)
+
+    # Update docs
+    func.__doc__ = _read_doc_template(schema)
+    return func
 
 
-def read_nexus(filename=None,
-               data=None,
-               add_node_labels=True):
-    __doc__ = _doc_template('nexus')
-    return _read(filename=filename, data=data, schema='nexus',
-                 add_node_labels=True)
+def _read_function(schema):
+    """Add a write method for named schema to a class.
+    """
+    def func(
+        filename=None,
+        data=None,
+        add_node_labels=True,
+        **kwargs):
+        # Use generic write class to write data.
+        return _read(
+            filename=filename,
+            data=data,
+            schema=schema,
+            add_node_labels=add_node_labels,
+            **kwargs
+        )
+    # Update docs
+    func.__doc__ = _read_doc_template(schema)
+    return func
 
 
-def read_nexml(filename=None,
-               data=None,
-               add_node_labels=True):
-    __doc__ = _doc_template('nexml')
-    return _read(filename=filename, data=data, schema='nexml',
-                 add_node_labels=True)
+read_newick = _read_function('newick')
+read_nexus = _read_function('nexus')
+read_nexml = _read_function('nexml')
