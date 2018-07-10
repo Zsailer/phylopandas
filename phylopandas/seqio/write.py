@@ -70,7 +70,7 @@ def pandas_df_to_biopython_seqrecord(
         # sequence data and therefore the row is ignored.
         try:
             # Get sequence
-            seq = row[sequence_col]
+            seq = Seq(row[sequence_col], alphabet=alphabet)
 
             # Get id
             if id_col == 'index':
@@ -89,7 +89,6 @@ def pandas_df_to_biopython_seqrecord(
                 id=id,
                 description=description,
             )
-            print(seq)
             seq_records.append(record)
         except TypeError:
             pass
@@ -101,6 +100,7 @@ def pandas_series_to_biopython_seqrecord(
     id_col='id',
     sequence_col='sequence',
     extra_data=None,
+    alphabet=None
     ):
     """Convert pandas series to biopython seqrecord for easy writing.
 
@@ -124,7 +124,7 @@ def pandas_series_to_biopython_seqrecord(
         List of biopython seqrecords.
     """
     # Get sequence
-    seq = row[sequence_col]
+    seq = Seq(row[sequence_col], alphabet=alphabet)
 
     # Get id
     id = row[id_col]
@@ -189,6 +189,7 @@ def _write(
             id_col=id_col,
             sequence_col=sequence_col,
             extra_data=extra_data,
+            alphabet=alphabet,
         )
 
     # Build a record from a pandas Series
@@ -198,6 +199,7 @@ def _write(
             id_col=id_col,
             sequence_col=sequence_col,
             extra_data=extra_data,
+            alphabet=alphabet,
         )
 
     # Write to disk or return string
@@ -213,7 +215,7 @@ def _write_method(schema):
     def method(
         self,
         filename=None,
-        schema='fasta',
+        schema=schema,
         id_col='index',
         sequence_col='sequence',
         extra_data=None,
@@ -241,7 +243,7 @@ def _write_function(schema):
     def func(
         data,
         filename=None,
-        schema='fasta',
+        schema=schema,
         id_col='index',
         sequence_col='sequence',
         extra_data=None,
