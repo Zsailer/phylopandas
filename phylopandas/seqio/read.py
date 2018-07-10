@@ -92,7 +92,7 @@ def _read_method(schema):
         filename,
         seq_label='sequence',
         alphabet=None,
-        on='index',
+        combine_on='index',
         **kwargs):
         # Use generic write class to write data.
         df0 = self._data
@@ -103,7 +103,7 @@ def _read_method(schema):
             alphabet=alphabet,
             **kwargs
         )
-        return df0.phylo.combine(df1, on=on)
+        return df0.phylo.combine(df1, on=combine_on)
 
     # Update docs
     func.__doc__ = _read_doc_template(schema)
