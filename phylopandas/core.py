@@ -115,10 +115,10 @@ class PhyloPandasDataFrameMethods(object):
         on : str
             Column to update index.
         """
-        # # Determine column labels for new dataframe (Maintain order of columns)
-        # column_idx = {k: None for k in self._data.columns}
-        # column_idx.update({k: None for k in other.columns})
-        # column_idx = list(column_labels.keys())
+        # Determine column labels for new dataframe (Maintain order of columns)
+        column_idx = {k: None for k in self._data.columns}
+        column_idx.update({k: None for k in other.columns})
+        column_idx = list(column_idx.keys())
 
         df0 = self._data
         df1 = other
@@ -148,59 +148,6 @@ class PhyloPandasDataFrameMethods(object):
         df.set_index('index', inplace=True, drop=True)
         df.index.name = None
 
-        # Store dataframe
-        self._data = df
-        return self._data
-
-        #
-        #
-        # df0.index = idx
-        #
-        #
-        #
-        #
-        #
-        #
-        # df0 = self._data.to_dict()
-        # df1 = other.to_dict()
-        #
-        #
-        #
-        #
-        #
-        #
-        #
-        #
-        #
-        # # If index is passed, update on index
-        # if on == 'index':
-        #     self._data = self._data.combine_first(other)
-        #
-        # elif on in self._data.columns:
-        #
-        #     # Move index of current dataframe
-        #     df0 = self._data
-        #     df0['index'] = df0.index
-        #     df0.set_index(on, inplace=True)
-        #
-        #     # Reset index of new dataframe
-        #     df1 = other
-        #     df1.set_index(on, inplace=True)
-        #
-        #     # Update
-        #     from IPython.display import display
-        #     display(df1)
-        #
-        #     df0.combine_first(df1)
-        #     display(df0)
-        #
-        #     # Change index back to uid.
-        #     df0['id'] = df0.index
-        #     df0.set_index('index', inplace=True)
-        #     df0.index.name = None # Remove name of index
-        #
-        #     # Store data (with old order).
-        #     print(df0.columns)
-        #     self._data = df0[list(column_labels.keys())]
-
+        # Store dataframe (maintaining original order)
+        self._data = df[column_idx]
         return self._data
