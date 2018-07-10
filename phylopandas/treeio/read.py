@@ -141,6 +141,7 @@ def _read_method(schema):
         filename=None,
         data=None,
         add_node_labels=True,
+        combine_on='index',
         **kwargs):
         # Use generic write class to write data.
         df0 = self._data
@@ -151,7 +152,7 @@ def _read_method(schema):
             add_node_labels=add_node_labels,
             **kwargs
         )
-        return df0.phylo.combine(df1, on=on)
+        return df0.phylo.combine(df1, on=combine_on)
 
     # Update docs
     func.__doc__ = _read_doc_template(schema)
