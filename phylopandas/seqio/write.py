@@ -33,7 +33,7 @@ def _write_doc_template(schema):
 
 def pandas_df_to_biopython_seqrecord(
     df,
-    id_col='index',
+    id_col='uid',
     sequence_col='sequence',
     extra_data=None,
     alphabet=None,
@@ -73,10 +73,7 @@ def pandas_df_to_biopython_seqrecord(
             seq = Seq(row[sequence_col], alphabet=alphabet)
 
             # Get id
-            if id_col == 'index':
-                id = i
-            else:
-                id = row[id_col]
+            id = row[id_col]
 
             # Build a description
             description = ""
@@ -97,7 +94,7 @@ def pandas_df_to_biopython_seqrecord(
 
 def pandas_series_to_biopython_seqrecord(
     series,
-    id_col='id',
+    id_col='uid',
     sequence_col='sequence',
     extra_data=None,
     alphabet=None
@@ -148,7 +145,7 @@ def _write(
     data,
     filename=None,
     schema='fasta',
-    id_col='index',
+    id_col='uid',
     sequence_col='sequence',
     extra_data=None,
     alphabet=None,
@@ -216,7 +213,7 @@ def _write_method(schema):
         self,
         filename=None,
         schema=schema,
-        id_col='index',
+        id_col='uid',
         sequence_col='sequence',
         extra_data=None,
         alphabet=None,
@@ -244,7 +241,7 @@ def _write_function(schema):
         data,
         filename=None,
         schema=schema,
-        id_col='index',
+        id_col='uid',
         sequence_col='sequence',
         extra_data=None,
         alphabet=None,
