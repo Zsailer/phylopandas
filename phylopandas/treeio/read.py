@@ -32,7 +32,13 @@ def _read_doc_template(schema):
     return doc
 
 
-def _read(filename=None, data=None, schema=None, add_node_labels=True):
+def _read(
+    filename=None,
+    data=None,
+    schema=None,
+    add_node_labels=True,
+    use_uids=True
+    ):
     """Read a phylogenetic tree into a phylopandas.DataFrame.
 
     The resulting DataFrame has the following columns:
@@ -77,12 +83,16 @@ def _read(filename=None, data=None, schema=None, add_node_labels=True):
 
     # Initialize the data object.
     idx = []
-    data = {'type':[],
+    data = {
+            'type':[],
             'id':[],
             'parent':[],
             'length':[],
             'label':[],
             'distance': []}
+
+    if use_uids:
+        data['uid'] = []
 
     # Add labels to internal nodes if set to true.
     if add_node_labels:
@@ -120,7 +130,6 @@ def _read(filename=None, data=None, schema=None, add_node_labels=True):
             raise Exception("Subtree is not attached to tree?")
 
         # Add this node to the data.
-        idx.append(get_random_id(10))
         data['type'].append(type_)
         data['id'].append(id_)
         data['parent'].append(parent_label)
@@ -128,8 +137,11 @@ def _read(filename=None, data=None, schema=None, add_node_labels=True):
         data['label'].append(label)
         data['distance'].append(distance)
 
+        if use_uids:
+            data['uid'].append(get_random_id(10))
+
     # Construct dataframe.
-    df = pandas.DataFrame(data, index=idx)
+    df = pandas.DataFrame(data)
     return df
 
 
@@ -142,6 +154,7 @@ def _read_method(schema):
         data=None,
         add_node_labels=True,
         combine_on='index',
+        use_uids=True,
         **kwargs):
         # Use generic write class to write data.
         df0 = self._data
@@ -150,6 +163,7 @@ def _read_method(schema):
             data=data,
             schema=schema,
             add_node_labels=add_node_labels,
+            use_uids=use_uids,
             **kwargs
         )
         return df0.phylo.combine(df1, on=combine_on)
@@ -166,6 +180,7 @@ def _read_function(schema):
         filename=None,
         data=None,
         add_node_labels=True,
+        use_uids=True,
         **kwargs):
         # Use generic write class to write data.
         return _read(
@@ -173,6 +188,7 @@ def _read_function(schema):
             data=data,
             schema=schema,
             add_node_labels=add_node_labels,
+            use_uids=use_uids,
             **kwargs
         )
     # Update docs

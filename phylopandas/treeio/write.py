@@ -24,8 +24,8 @@ def _write_doc_template(schema):
 
 def _pandas_df_to_dendropy_tree(
     df,
-    taxon_col=None,
-    node_col=None,
+    taxon_col='uid',
+    node_col='uid',
     branch_lengths=True,
     ):
     """Turn a phylopandas dataframe into a dendropy tree.
@@ -54,19 +54,11 @@ def _pandas_df_to_dendropy_tree(
         # Get taxon for node (if leaf node).
         taxon = None
         if data['type'] == 'leaf':
-            if taxon_col is None:
-                taxon = idx
-            else:
-                taxon = data[taxon_col]
-
-            taxon = dendropy.Taxon(label=taxon)
+            taxon = dendropy.Taxon(label=data[taxon_col])
             taxon_namespace.add_taxon(taxon)
 
         # Get label for node.
-        if node_col is None:
-            label = idx
-        else:
-            label = data[node_col]
+        label = data[node_col]
 
         # Get edge length.
         edge_length = None
@@ -111,9 +103,10 @@ def _write(
     df,
     filename=None,
     schema='newick',
-    taxon_col=None,
-    node_col=None,
+    taxon_col='uid',
+    node_col='uid',
     branch_lengths=True,
+    **kwargs
     ):
     """Write a phylopandas tree DataFrame to various formats.
 
@@ -146,7 +139,7 @@ def _write(
 
     # Write out format
     if filename is not None:
-        tree.write(path=filename, schema=schema)
+        tree.write(path=filename, schema=schema, **kwargs)
     else:
         return tree.as_string(schema=schema)
 
@@ -158,8 +151,8 @@ def _write_method(schema):
         self,
         filename=None,
         schema='newick',
-        taxon_col=None,
-        node_col=None,
+        taxon_col='uid',
+        node_col='uid',
         branch_lengths=True,
         **kwargs):
         # Use generic write class to write data.
@@ -184,8 +177,8 @@ def _write_function(schema):
         data,
         filename=None,
         schema='newick',
-        taxon_col=None,
-        node_col=None,
+        taxon_col='uid',
+        node_col='uid',
         branch_lengths=True,
         **kwargs):
         # Use generic write class to write data.

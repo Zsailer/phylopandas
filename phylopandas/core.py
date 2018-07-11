@@ -128,10 +128,6 @@ class PhyloPandasDataFrameMethods(object):
         df0 = self._data.copy()
         df1 = other.copy()
 
-        # Save index as column in df
-        df0['index'] = df0.index
-        df1['index'] = df1.index
-
         # Set index to whatever column is given
         df0 = df0.set_index(on, inplace=False, drop=False)
         df1 = df1.set_index(on, inplace=False, drop=False)
@@ -140,6 +136,7 @@ class PhyloPandasDataFrameMethods(object):
         data0 = df0.to_dict(orient="index")
         data1 = df1.to_dict(orient="index")
 
+        # Update.
         for key in data1.keys():
             try:
                 data0[key].update(data1[key])
@@ -149,9 +146,13 @@ class PhyloPandasDataFrameMethods(object):
         # Build new dataframe
         df = pd.DataFrame(data0).T
 
-        # Reset index
-        df = df.set_index('index', inplace=False, drop=True)
-        df.index.name = None
+        # Check for missing columns
+        for key in column_idx:
+            if key not in df.columns:
+                df[key] = None
 
-        # Store dataframe (maintaining original order)
+        # Reset the index.
+        df.reset_index(inplace=True)
+
+        # Return dataframe (maintaining original order)
         return df[column_idx]

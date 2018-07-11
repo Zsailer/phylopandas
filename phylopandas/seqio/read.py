@@ -39,6 +39,7 @@ def _read(
     schema,
     seq_label='sequence',
     alphabet=None,
+    use_uids=True,
     **kwargs):
     """Use BioPython's sequence parsing module to convert any file format to
     a Pandas DataFrame.
@@ -64,24 +65,27 @@ def _read(
     kwargs.update(alphabet=alphabet)
 
     # Prepare DataFrame fields.
-    idx = []
     data = {
         'id': [],
         seq_label: [],
         'description': [],
         'label': []
     }
+    if use_uids:
+        data['uid'] = []
 
     # Parse Fasta file.
     for i, s in enumerate(SeqIO.parse(filename, format=schema, **kwargs)):
-        idx.append(get_random_id(10))
         data['id'].append(s.id)
         data[seq_label].append(str(s.seq))
         data['description'].append(s.description)
         data['label'].append(s.name)
 
+        if use_uids:
+            data['uid'].append(get_random_id(10))
+
     # Port to DataFrame.
-    return pd.DataFrame(data, index=idx)
+    return pd.DataFrame(data)
 
 
 def _read_method(schema):
@@ -92,7 +96,8 @@ def _read_method(schema):
         filename,
         seq_label='sequence',
         alphabet=None,
-        combine_on='index',
+        combine_on='uid',
+        use_uids=True,
         **kwargs):
         # Use generic write class to write data.
         df0 = self._data
@@ -101,6 +106,7 @@ def _read_method(schema):
             schema=schema,
             seq_label=seq_label,
             alphabet=alphabet,
+            use_uids=use_uids,
             **kwargs
         )
         return df0.phylo.combine(df1, on=combine_on)
@@ -117,6 +123,7 @@ def _read_function(schema):
         filename,
         seq_label='sequence',
         alphabet=None,
+        use_uids=True,
         **kwargs):
         # Use generic write class to write data.
         return _read(
@@ -124,6 +131,7 @@ def _read_function(schema):
             schema=schema,
             seq_label=seq_label,
             alphabet=alphabet,
+            use_uids=use_uids,
             **kwargs
         )
     # Update docs
