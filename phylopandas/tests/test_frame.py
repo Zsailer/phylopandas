@@ -15,7 +15,6 @@ def test_read_fasta(path_to_dat):
     assert 'id' in keys
     assert 'sequence' in keys
     assert 'description' in keys
-    assert 'name' in keys
 
 
 def test_read_clustal(path_to_dat):
@@ -29,7 +28,6 @@ def test_read_clustal(path_to_dat):
     assert 'id' in keys
     assert 'sequence' in keys
     assert 'description' in keys
-    assert 'name' in keys
 
 
 def test_read_phylip(path_to_dat):
@@ -43,7 +41,6 @@ def test_read_phylip(path_to_dat):
     assert 'id' in keys
     assert 'sequence' in keys
     assert 'description' in keys
-    assert 'name' in keys
 
 
 class Testframe(object):

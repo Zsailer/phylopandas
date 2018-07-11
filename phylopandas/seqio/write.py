@@ -31,33 +31,123 @@ def _write_doc_template(schema):
     return s
 
 
-def _pandas_series_to_biopython_record(
-    series,
-    id_col='id',
-    id_only=False,
+def pandas_df_to_biopython_seqrecord(
+    df,
+    id_col='uid',
     sequence_col='sequence',
-    alphabet=None):
-    """
-    """
-    seq = Seq(series[sequence_col], alphabet)
-    # Create a SeqRecord and append to list.
-    if id_only:
-        record = SeqRecord(seq, id=series[id_col], name='',
-                           description='')
+    extra_data=None,
+    alphabet=None,
+    ):
+    """Convert pandas dataframe to biopython seqrecord for easy writing.
 
-    else:
-        record = SeqRecord(seq, id=series[id_col], name=series['name'],
-                           description=series['description'])
-    return record
+    Parameters
+    ----------
+    df : Dataframe
+        Pandas dataframe to convert
 
+    id_col : str
+        column in dataframe to use as sequence label
+
+    sequence_col str:
+        column in dataframe to use as sequence data
+
+    extra_data : list
+        extra columns to use in sequence description line
+
+    alphabet :
+        biopython Alphabet object
+
+    Returns
+    -------
+    seq_records :
+        List of biopython seqrecords.
+    """
+    seq_records = []
+
+    for i, row in df.iterrows():
+        # Tries getting sequence data. If a TypeError at the seqrecord
+        # creation is thrown, it is assumed that this row does not contain
+        # sequence data and therefore the row is ignored.
+        try:
+            # Get sequence
+            seq = Seq(row[sequence_col], alphabet=alphabet)
+
+            # Get id
+            id = row[id_col]
+
+            # Build a description
+            description = ""
+            if extra_data is not None:
+                description = " ".join([row[key] for key in extra_data])
+
+            # Build a record
+            record = SeqRecord(
+                seq=seq,
+                id=id,
+                description=description,
+            )
+            seq_records.append(record)
+        except TypeError:
+            pass
+
+    return seq_records
+
+def pandas_series_to_biopython_seqrecord(
+    series,
+    id_col='uid',
+    sequence_col='sequence',
+    extra_data=None,
+    alphabet=None
+    ):
+    """Convert pandas series to biopython seqrecord for easy writing.
+
+    Parameters
+    ----------
+    series : Series
+        Pandas series to convert
+
+    id_col : str
+        column in dataframe to use as sequence label
+
+    sequence_col str:
+        column in dataframe to use as sequence data
+
+    extra_data : list
+        extra columns to use in sequence description line
+
+    Returns
+    -------
+    seq_records :
+        List of biopython seqrecords.
+    """
+    # Get sequence
+    seq = Seq(row[sequence_col], alphabet=alphabet)
+
+    # Get id
+    id = row[id_col]
+
+    # Build a description
+    description = None
+    if extra_data is not None:
+        description = " ".join([row[key] for key in extra_data])
+
+    # Build a record
+    record = SeqRecord(
+        seq=seq,
+        id=id,
+        description=description,
+    )
+
+    seq_records = [record]
+    return seq_records
 
 def _write(
     data,
     filename=None,
     schema='fasta',
+    id_col='uid',
     sequence_col='sequence',
-    id_col='id',
-    id_only=False,
+    extra_data=None,
     alphabet=None,
     **kwargs):
     """General write function. Write phylopanda data to biopython format.
@@ -89,30 +179,25 @@ def _write(
             "The alphabet is not recognized. Must be 'dna', 'rna', "
             "'nucleotide', or 'protein'.")
 
-    seq_records = []
-
     # Build a list of records from a pandas DataFrame
     if type(data) is pd.DataFrame:
-        for i, row in data.iterrows():
-            record = _pandas_series_to_biopython_record(
-                row,
-                id_col=id_col,
-                id_only=id_only,
-                sequence_col=sequence_col,
-                alphabet=alphabet
-            )
-            seq_records.append(record)
+        seq_records = pandas_df_to_biopython_seqrecord(
+            data,
+            id_col=id_col,
+            sequence_col=sequence_col,
+            extra_data=extra_data,
+            alphabet=alphabet,
+        )
 
     # Build a record from a pandas Series
     elif type(data) is pd.Series:
-        record = _pandas_series_to_biopython_record(
-            row,
+        seq_record = _pandas_series_to_biopython_record(
+            data,
             id_col=id_col,
-            id_only=id_only,
             sequence_col=sequence_col,
-            alphabet=alphabet
+            extra_data=extra_data,
+            alphabet=alphabet,
         )
-        seq_records.append(record)
 
     # Write to disk or return string
     if filename is not None:
@@ -127,9 +212,10 @@ def _write_method(schema):
     def method(
         self,
         filename=None,
+        schema=schema,
+        id_col='uid',
         sequence_col='sequence',
-        id_col='id',
-        id_only=False,
+        extra_data=None,
         alphabet=None,
         **kwargs):
         # Use generic write class to write data.
@@ -137,9 +223,9 @@ def _write_method(schema):
             self._data,
             filename=filename,
             schema=schema,
-            sequence_col=sequence_col,
             id_col=id_col,
-            id_only=id_only,
+            sequence_col=sequence_col,
+            extra_data=extra_data,
             alphabet=alphabet,
             **kwargs
         )
@@ -154,9 +240,10 @@ def _write_function(schema):
     def func(
         data,
         filename=None,
+        schema=schema,
+        id_col='uid',
         sequence_col='sequence',
-        id_col='id',
-        id_only=False,
+        extra_data=None,
         alphabet=None,
         **kwargs):
         # Use generic write class to write data.
@@ -164,9 +251,9 @@ def _write_function(schema):
             data,
             filename=filename,
             schema=schema,
-            sequence_col=sequence_col,
             id_col=id_col,
-            id_only=id_only,
+            sequence_col=sequence_col,
+            extra_data=extra_data,
             alphabet=alphabet,
             **kwargs
         )

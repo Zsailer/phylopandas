@@ -11,6 +11,7 @@ import Bio.Alphabet
 
 # Import Phylopandas DataFrame
 import pandas as pd
+from ..utils import get_random_id
 
 
 def _read_doc_template(schema):
@@ -25,7 +26,7 @@ def _read_doc_template(schema):
     Parameters
     ----------
     filename : str
-        File name of {} file. 
+        File name of {} file.
 
     seq_label : str (default='sequence')
         Sequence column name in DataFrame.
@@ -38,6 +39,7 @@ def _read(
     schema,
     seq_label='sequence',
     alphabet=None,
+    use_uids=True,
     **kwargs):
     """Use BioPython's sequence parsing module to convert any file format to
     a Pandas DataFrame.
@@ -63,17 +65,56 @@ def _read(
     kwargs.update(alphabet=alphabet)
 
     # Prepare DataFrame fields.
-    data = {'id': [], seq_label: [], 'description': [], 'name': []}
+    data = {
+        'id': [],
+        seq_label: [],
+        'description': [],
+        'label': []
+    }
+    if use_uids:
+        data['uid'] = []
 
     # Parse Fasta file.
     for i, s in enumerate(SeqIO.parse(filename, format=schema, **kwargs)):
         data['id'].append(s.id)
         data[seq_label].append(str(s.seq))
         data['description'].append(s.description)
-        data['name'].append(s.name)
+        data['label'].append(s.name)
+
+        if use_uids:
+            data['uid'].append(get_random_id(10))
 
     # Port to DataFrame.
     return pd.DataFrame(data)
+
+
+def _read_method(schema):
+    """Add a write method for named schema to a class.
+    """
+    def func(
+        self,
+        filename,
+        seq_label='sequence',
+        alphabet=None,
+        combine_on='uid',
+        use_uids=True,
+        **kwargs):
+        # Use generic write class to write data.
+        df0 = self._data
+        df1 = _read(
+            filename=filename,
+            schema=schema,
+            seq_label=seq_label,
+            alphabet=alphabet,
+            use_uids=use_uids,
+            **kwargs
+        )
+        return df0.phylo.combine(df1, on=combine_on)
+
+    # Update docs
+    func.__doc__ = _read_doc_template(schema)
+    return func
+
 
 def _read_function(schema):
     """Add a write method for named schema to a class.
@@ -82,6 +123,7 @@ def _read_function(schema):
         filename,
         seq_label='sequence',
         alphabet=None,
+        use_uids=True,
         **kwargs):
         # Use generic write class to write data.
         return _read(
@@ -89,11 +131,13 @@ def _read_function(schema):
             schema=schema,
             seq_label=seq_label,
             alphabet=alphabet,
+            use_uids=use_uids,
             **kwargs
         )
     # Update docs
     func.__doc__ = _read_doc_template(schema)
     return func
+
 
 # Various read functions to various formats.
 read_fasta = _read_function('fasta')
