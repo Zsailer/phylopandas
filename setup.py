@@ -21,7 +21,10 @@ REQUIRES_PYTHON = '>=3.0'
 VERSION = None
 
 # What packages are required for this module to be executed?
-REQUIRED = []
+REQUIRED = ["pandas>=0.22.0",
+            "pandas_flavor>=0.1.0",
+            "biopython",
+            "dendropy"]
 
 # What packages are optional?
 EXTRAS = {}
