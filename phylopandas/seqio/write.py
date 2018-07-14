@@ -109,7 +109,7 @@ def pandas_series_to_biopython_seqrecord(
     id_col : str
         column in dataframe to use as sequence label
 
-    sequence_col str:
+    sequence_col : str
         column in dataframe to use as sequence data
 
     extra_data : list
@@ -121,15 +121,15 @@ def pandas_series_to_biopython_seqrecord(
         List of biopython seqrecords.
     """
     # Get sequence
-    seq = Seq(row[sequence_col], alphabet=alphabet)
+    seq = Seq(series[sequence_col], alphabet=alphabet)
 
     # Get id
-    id = row[id_col]
+    id = series[id_col]
 
     # Build a description
-    description = None
+    description = ""
     if extra_data is not None:
-        description = " ".join([row[key] for key in extra_data])
+        description = " ".join([series[key] for key in extra_data])
 
     # Build a record
     record = SeqRecord(
@@ -191,7 +191,7 @@ def _write(
 
     # Build a record from a pandas Series
     elif type(data) is pd.Series:
-        seq_record = _pandas_series_to_biopython_record(
+        seq_records = pandas_series_to_biopython_seqrecord(
             data,
             id_col=id_col,
             sequence_col=sequence_col,
