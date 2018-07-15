@@ -147,6 +147,8 @@ read_embl = _read_function('embl')
 read_nexus = _read_function('nexus')
 read_swiss = _read_function('swiss')
 read_fastq = _read_function('fastq')
+read_phylip_sequential = _read_function('phylip-sequential')
+read_phylip_relaxed = _read_function('phylip-relaxed')
 
 
 def read_blast_xml(filename, **kwargs):

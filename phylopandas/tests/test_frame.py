@@ -43,6 +43,32 @@ def test_read_phylip(path_to_dat):
     assert 'description' in keys
 
 
+def test_read_phylip_relaxed(path_to_dat):
+    # Get path
+    path = os.path.join(path_to_dat, 'PF08793_seed.phylip')
+    df = ph.read_phylip_relaxed(path)
+
+    # Tests
+    keys = df.keys()
+    assert type(df) == ph.DataFrame
+    assert 'id' in keys
+    assert 'sequence' in keys
+    assert 'description' in keys
+
+
+def test_read_phylip_sequential(path_to_dat):
+    # Get path
+    path = os.path.join(path_to_dat, 'PF08793_seed.phylip')
+    df = ph.read_phylip_sequential(path)
+
+    # Tests
+    keys = df.keys()
+    assert type(df) == ph.DataFrame
+    assert 'id' in keys
+    assert 'sequence' in keys
+    assert 'description' in keys
+
+
 class Testframe(object):
 
     @pytest.mark.usefixtures("clean_dat")
