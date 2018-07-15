@@ -1,0 +1,4 @@
+pandas>=0.22.0
+pandas_flavor>=0.1.0
+biopython
+dendropy
