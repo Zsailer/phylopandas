@@ -27,6 +27,8 @@ class PhyloPandasSeriesMethods(object):
     to_swiss = seqio.write._write_method('swiss')
     to_fastq = seqio.write._write_method('fastq')
     to_fasta_twoline = seqio.write._write_method('fasta-2line')
+    to_phylip_sequential = seqio.write._write_method('phylip-sequential')
+    to_phylip_relaxed = seqio.write._write_method('phylip-relaxed')
 
 
 @register_dataframe_accessor('phylo')
@@ -52,6 +54,8 @@ class PhyloPandasDataFrameMethods(object):
     read_swiss = seqio.read._read_method('swiss')
     read_fastq = seqio.read._read_method('fastq')
     read_fasta_twoline = seqio.read._read_method('fasta-2line')
+    read_phylip_sequential = seqio.read._read_method('phylip-sequential')
+    read_phylip_relaxed = seqio.read._read_method('phylip-relaxed')
 
     # Tree file reading methods.
     read_newick = treeio.read._read_method('newick')
@@ -68,7 +72,8 @@ class PhyloPandasDataFrameMethods(object):
     to_swiss = seqio.write._write_method('swiss')
     to_fastq = seqio.write._write_method('fastq')
     to_fasta_twoline = seqio.write._write_method('fasta-2line')
-
+    to_phylip_sequential = seqio.write._write_method('phylip-sequential')
+    to_phylip_relaxed = seqio.write._write_method('phylip-relaxed')
 
     # Tree file reading methods.
     to_newick = treeio.write._write_method('newick')

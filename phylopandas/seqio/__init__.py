@@ -5,6 +5,8 @@ from .read import (read_embl,
                    read_swiss,
                    read_phylip,
                    read_clustal,
-                   read_blast_xml)
+                   read_blast_xml,
+                   read_phylip_relaxed,
+                   read_phylip_sequential)
 
 from . import write
