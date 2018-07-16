@@ -88,13 +88,12 @@ $ pytest
 
 ## Install
 
-Install from PyPi:
+Install from PyPI:
 ```
 pip install phylopandas
 ```
 
 Install from source:
-
 ```
 git clone https://github.com/Zsailer/phylopandas
 cd phylopandas
