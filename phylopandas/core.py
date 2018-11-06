@@ -50,7 +50,7 @@ class PhyloPandasDataFrameMethods(object):
     read_phylip = seqio.read._read_method('phylip')
     read_clustal = seqio.read._read_method('clustal')
     read_embl = seqio.read._read_method('embl')
-    read_nexus = seqio.read._read_method('nexus')
+    read_nexus_seq = seqio.read._read_method('nexus')
     read_swiss = seqio.read._read_method('swiss')
     read_fastq = seqio.read._read_method('fastq')
     read_fasta_twoline = seqio.read._read_method('fasta-2line')
@@ -59,6 +59,7 @@ class PhyloPandasDataFrameMethods(object):
 
     # Tree file reading methods.
     read_newick = treeio.read._read_method('newick')
+    read_nexus_tree = treeio.read._read_method('nexus')
 
     # -----------------------------------------------------------
     # Extra write methods.
@@ -68,7 +69,7 @@ class PhyloPandasDataFrameMethods(object):
     to_phylip = seqio.write._write_method('phylip')
     to_clustal = seqio.write._write_method('clustal')
     to_embl = seqio.write._write_method('embl')
-    to_nexus = seqio.write._write_method('nexus')
+    to_nexus_seq = seqio.write._write_method('nexus')
     to_swiss = seqio.write._write_method('swiss')
     to_fastq = seqio.write._write_method('fastq')
     to_fasta_twoline = seqio.write._write_method('fasta-2line')
@@ -77,7 +78,7 @@ class PhyloPandasDataFrameMethods(object):
 
     # Tree file reading methods.
     to_newick = treeio.write._write_method('newick')
-
+    to_nexus_tree = treeio.write._write_method('nexus')
 
     # -----------------------------------------------------------
     # Useful dataframe methods specific to sequencing data.
