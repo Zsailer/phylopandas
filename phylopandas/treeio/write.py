@@ -13,8 +13,14 @@ def _write_doc_template(schema):
     taxon_col : str (default='sequence')
         Sequence column name in DataFrame.
 
+    taxon_annotations : str
+        List of columns to annotation in the tree taxon.
+
     node_col : str (default='id')
         ID column name in DataFrame
+
+    node_annotations : str
+        List of columns to annotation in the node taxon.
 
     branch_lengths : bool (default=False)
         If True, use only the ID column to label sequences in fasta.
@@ -25,7 +31,9 @@ def _write_doc_template(schema):
 def _pandas_df_to_dendropy_tree(
     df,
     taxon_col='uid',
+    taxon_annotations=[],
     node_col='uid',
+    node_annotations=[],
     branch_lengths=True,
     ):
     """Turn a phylopandas dataframe into a dendropy tree.
@@ -38,12 +46,24 @@ def _pandas_df_to_dendropy_tree(
     taxon_col : str (optional)
         Column in dataframe to label the taxon. If None, the index will be used.
 
+    taxon_annotations : str
+        List of columns to annotation in the tree taxon.
+
     node_col : str (optional)
         Column in dataframe to label the nodes. If None, the index will be used.
+
+    node_annotations : str
+        List of columns to annotation in the node taxon.
 
     branch_lengths : bool
         If True, inclues branch lengths.
     """
+    if isinstance(taxon_col, str) is False:
+        raise Exception("taxon_col must be a string.")
+
+    if isinstance(node_col, str) is False:
+        raise Exception("taxon_col must be a string.")
+
     # Construct a list of nodes from dataframe.
     taxon_namespace = dendropy.TaxonNamespace()
     nodes = {}
@@ -55,6 +75,9 @@ def _pandas_df_to_dendropy_tree(
         taxon = None
         if data['type'] == 'leaf':
             taxon = dendropy.Taxon(label=data[taxon_col])
+            # Add annotations data.
+            for ann in taxon_annotations:
+                taxon.annotations.add_new(ann, data[ann])
             taxon_namespace.add_taxon(taxon)
 
         # Get label for node.
@@ -71,6 +94,10 @@ def _pandas_df_to_dendropy_tree(
             label=label,
             edge_length=edge_length
         )
+        
+        # Add node annotations
+        for ann in node_annotations:
+            n.annotations.add_new(ann, data[ann])
 
         nodes[idx] = n
 
@@ -104,7 +131,9 @@ def _write(
     filename=None,
     schema='newick',
     taxon_col='uid',
+    taxon_annotations=[],
     node_col='uid',
+    node_annotations=[],
     branch_lengths=True,
     **kwargs
     ):
@@ -124,8 +153,14 @@ def _write(
     taxon_col : str (optional)
         Column in dataframe to label the taxon. If None, the index will be used.
 
+    taxon_annotations : str
+        List of columns to annotation in the tree taxon.
+
     node_col : str (optional)
         Column in dataframe to label the nodes. If None, the index will be used.
+
+    node_annotations : str
+        List of columns to annotation in the node taxon.
 
     branch_lengths : bool
         If True, inclues branch lengths.
@@ -133,13 +168,16 @@ def _write(
     tree = _pandas_df_to_dendropy_tree(
         df,
         taxon_col=taxon_col,
+        taxon_annotations=taxon_annotations,
         node_col=node_col,
+        node_annotations=node_annotations,
         branch_lengths=branch_lengths,
     )
 
     # Write out format
+    print(schema)
     if filename is not None:
-        tree.write(path=filename, schema=schema, **kwargs)
+        tree.write(path=filename, schema=schema, suppress_annotations=False, **kwargs)
     else:
         return tree.as_string(schema=schema)
 
@@ -150,9 +188,11 @@ def _write_method(schema):
     def method(
         self,
         filename=None,
-        schema='newick',
+        schema=schema,
         taxon_col='uid',
+        taxon_annotations=[],
         node_col='uid',
+        node_annotations=[],
         branch_lengths=True,
         **kwargs):
         # Use generic write class to write data.
@@ -161,7 +201,9 @@ def _write_method(schema):
             filename=filename,
             schema=schema,
             taxon_col=taxon_col,
+            taxon_annotations=taxon_annotations,
             node_col=node_col,
+            node_annotations=node_annotations,
             branch_lengths=branch_lengths,
             **kwargs
         )
@@ -176,9 +218,11 @@ def _write_function(schema):
     def func(
         data,
         filename=None,
-        schema='newick',
+        schema=schema,
         taxon_col='uid',
+        taxon_annotations=[],
         node_col='uid',
+        node_annotations=[],
         branch_lengths=True,
         **kwargs):
         # Use generic write class to write data.
@@ -187,7 +231,9 @@ def _write_function(schema):
             filename=filename,
             schema=schema,
             taxon_col=taxon_col,
+            taxon_annotations=taxon_annotations,
             node_col=node_col,
+            node_annotations=node_annotations,
             branch_lengths=branch_lengths,
             **kwargs
         )
@@ -197,3 +243,5 @@ def _write_function(schema):
 
 
 to_newick = _write_function('newick')
+to_nexml = _write_function('nexml')
+to_nexus_tree = _write_function('nexus')

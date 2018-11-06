@@ -1,7 +1,7 @@
 from .read import (read_embl,
                    read_fasta,
                    read_fastq,
-                   read_nexus,
+                   read_nexus_seq,
                    read_swiss,
                    read_phylip,
                    read_clustal,

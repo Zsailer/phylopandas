@@ -197,5 +197,5 @@ def _read_function(schema):
 
 
 read_newick = _read_function('newick')
-read_nexus = _read_function('nexus')
 read_nexml = _read_function('nexml')
+read_nexus_tree = _read_function('nexus')
