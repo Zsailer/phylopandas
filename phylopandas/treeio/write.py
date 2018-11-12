@@ -241,6 +241,21 @@ def _write_function(schema):
     func.__doc__ = _write_doc_template(schema)
     return func
 
+def to_dendropy(
+    data,
+    taxon_col='uid',
+    taxon_annotations=[],
+    node_col='uid',
+    node_annotations=[],
+    branch_lengths=True):
+    return _pandas_df_to_dendropy_tree(
+        data,
+        taxon_col=taxon_col,
+        taxon_annotations=taxon_annotations,
+        node_col=node_col,
+        node_annotations=node_annotations,
+        branch_lengths=branch_lengths,
+    )
 
 to_newick = _write_function('newick')
 to_nexml = _write_function('nexml')

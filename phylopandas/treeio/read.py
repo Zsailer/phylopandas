@@ -32,64 +32,23 @@ def _read_doc_template(schema):
     return doc
 
 
-def _read(
-    filename=None,
-    data=None,
-    schema=None,
+def _dendropy_to_dataframe(
+    tree,
     add_node_labels=True,
-    use_uids=True
-    ):
-    """Read a phylogenetic tree into a phylopandas.DataFrame.
-
-    The resulting DataFrame has the following columns:
-        - name: label for each taxa or node.
-        - id: unique id (created by phylopandas) given to each node.
-        - type: type of node (leaf, internal, or root).
-        - parent: parent id. necessary for constructing trees.
-        - length: length of branch from parent to node.
-        - distance: distance from root.
-
-    Parameters
-    ----------
-    filename: str (default is None)
-        newick file to read into DataFrame.
-
-    data: str (default is None)
-        newick string to parse and read into DataFrame.
-
-    add_node_labels: bool
-        If true, labels the internal nodes with numbers.
-
-    Returns
-    -------
-    df: phylopandas.DataFrame.
-    """
-    if filename is not None:
-        # Use Dendropy to parse tree.
-        tree = dendropy.Tree.get(
-            path=filename,
-            schema=schema,
-            preserve_underscores=True)
-    elif data is not None:
-        tree = dendropy.Tree.get(
-            data=data,
-            schema=schema,
-            preserve_underscores=True)
-    else:
-        raise Exception('No tree given?')
-
+    use_uids=True):
+    """Convert Dendropy tree to Pandas dataframe."""
     # Maximum distance from root.
     tree.max_distance_from_root()
 
     # Initialize the data object.
     idx = []
     data = {
-            'type':[],
-            'id':[],
-            'parent':[],
-            'length':[],
-            'label':[],
-            'distance': []}
+        'type': [],
+        'id': [],
+        'parent': [],
+        'length': [],
+        'label': [],
+        'distance': []}
 
     if use_uids:
         data['uid'] = []
@@ -145,6 +104,60 @@ def _read(
     return df
 
 
+def _read(
+    filename=None,
+    data=None,
+    schema=None,
+    add_node_labels=True,
+    use_uids=True
+    ):
+    """Read a phylogenetic tree into a phylopandas.DataFrame.
+
+    The resulting DataFrame has the following columns:
+        - name: label for each taxa or node.
+        - id: unique id (created by phylopandas) given to each node.
+        - type: type of node (leaf, internal, or root).
+        - parent: parent id. necessary for constructing trees.
+        - length: length of branch from parent to node.
+        - distance: distance from root.
+
+    Parameters
+    ----------
+    filename: str (default is None)
+        newick file to read into DataFrame.
+
+    data: str (default is None)
+        newick string to parse and read into DataFrame.
+
+    add_node_labels: bool
+        If true, labels the internal nodes with numbers.
+
+    Returns
+    -------
+    df: phylopandas.DataFrame.
+    """
+    if filename is not None:
+        # Use Dendropy to parse tree.
+        tree = dendropy.Tree.get(
+            path=filename,
+            schema=schema,
+            preserve_underscores=True)
+    elif data is not None:
+        tree = dendropy.Tree.get(
+            data=data,
+            schema=schema,
+            preserve_underscores=True)
+    else:
+        raise Exception('No tree given?')
+
+    df = _dendropy_to_dataframe(
+        tree, 
+        add_node_labels=add_node_labels,
+        use_uids=use_uids
+    )
+    return df
+
+
 def _read_method(schema):
     """Add a write method for named schema to a class.
     """
@@ -195,6 +208,19 @@ def _read_function(schema):
     func.__doc__ = _read_doc_template(schema)
     return func
 
+
+def read_dendropy(
+    df,         
+    add_node_labels=True,
+    use_uids=True):
+    __doc__ = _read_doc_template('dendropy')
+
+    df = _dendropy_to_dataframe(
+        tree,
+        add_node_labels=add_node_labels,
+        use_uids=use_uids
+    )
+    return df
 
 read_newick = _read_function('newick')
 read_nexml = _read_function('nexml')

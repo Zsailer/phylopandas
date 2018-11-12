@@ -60,6 +60,20 @@ class PhyloPandasDataFrameMethods(object):
     # Tree file reading methods.
     read_newick = treeio.read._read_method('newick')
     read_nexus_tree = treeio.read._read_method('nexus')
+    
+    def read_dendropy(
+        self,
+        add_node_labels=True,
+        combine_on='index',
+        use_uids=True):
+        df0 = self._data
+        df1 = treeio.read.read_dendropy(
+            self._data,
+            add_node_labels=add_node_labels,
+            use_uids=use_uids
+        )
+        return df0.phylo.combine(df1, on=combine_on)
+
 
     # -----------------------------------------------------------
     # Extra write methods.
@@ -79,6 +93,22 @@ class PhyloPandasDataFrameMethods(object):
     # Tree file reading methods.
     to_newick = treeio.write._write_method('newick')
     to_nexus_tree = treeio.write._write_method('nexus')
+
+    def to_dendropy(
+        self,
+        taxon_col='uid',
+        taxon_annotations=[],
+        node_col='uid',
+        node_annotations=[],
+        branch_lengths=True):
+        return treeio.write.to_dendropy(
+            self._data,
+            taxon_col=taxon_col,
+            taxon_annotations=taxon_annotations,
+            node_col=node_col,
+            node_annotations=node_annotations,
+            branch_lengths=branch_lengths,
+        )
 
     # -----------------------------------------------------------
     # Useful dataframe methods specific to sequencing data.

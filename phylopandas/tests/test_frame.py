@@ -102,11 +102,11 @@ class Testframe(object):
         assert os.path.exists(embl_path)
 
     @pytest.mark.usefixtures("clean_dat")
-    def test_to_nexus(self, path_to_dat):
+    def test_to_nexus_seq(self, path_to_dat):
         path = os.path.join(path_to_dat, 'PF08793_seed.fasta')
         df = ph.read_fasta(path)
 
         # Write to csv
         nexus_path = os.path.join(path_to_dat, 'test.nexus')
-        df.phylo.to_nexus(alphabet='protein', filename=nexus_path)
+        df.phylo.to_nexus_seq(alphabet='protein', filename=nexus_path)
         assert os.path.exists(nexus_path)
