@@ -8,6 +8,12 @@ from . import seqio
 from . import treeio
 
 
+try: 
+    from phylovega import TreeChart
+except ImportError:
+    TreeChart = None
+
+
 @register_series_accessor('phylo')
 class PhyloPandasSeriesMethods(object):
     """
@@ -141,8 +147,8 @@ class PhyloPandasDataFrameMethods(object):
 
     def combine(self, other, on='index'):
         """Combine two dataframes. Update the first dataframe with second.
-        New columns are added after the dataframe. Overlapping columns update
-        the values of the columns.
+        New columns are added to the right of the first dataframe. Overlapping 
+        columns update the values of the columns.
 
         Technical note: maintains order of columns, appending new dataframe to
         old.
@@ -192,3 +198,11 @@ class PhyloPandasDataFrameMethods(object):
 
         # Return dataframe (maintaining original order)
         return df[column_idx]
+
+    @wraps(TreeChart)
+    def show(self, **kwargs):
+        # Show the tree using phylovega.
+        try:
+            return TreeChart(self._data.to_dict(orient='records'), **kwargs)
+        except NameError:
+            raise Exception("Looks like phylovega couldn't be imported. Is phylovega installed?")

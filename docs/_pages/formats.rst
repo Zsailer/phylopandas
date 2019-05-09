@@ -5,7 +5,7 @@ Sequence Formats
 ----------------
 
 - Fasta
--
+- 
 
 
 Tree formats

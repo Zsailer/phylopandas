@@ -3,7 +3,7 @@ The PhyloPandas DataFrame
 
 The phylopandas dataframe is the core datastructure in this package. It defines
 a set of columns (or grammar) for phylogenetic data. A few advantages of
-defining such a grammar is: 1) we can leverage powerful+interative
+defining such a grammar is: 1) we can leverage powerful+interactive
 visualization tools like Vega and 2) we standardize phylogenetic data in a
 familiar format.
 

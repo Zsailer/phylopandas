@@ -175,7 +175,6 @@ def _write(
     )
 
     # Write out format
-    print(schema)
     if filename is not None:
         tree.write(path=filename, schema=schema, suppress_annotations=False, **kwargs)
     else:

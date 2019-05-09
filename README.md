@@ -55,16 +55,11 @@ Read newick tree data
 df = ph.read_newick('tree.newick')
 ```
 
-Plot newick data (using [phylovega](https://github.com/Zsailer/phylovega)).
+Visualize the phylogenetic data (powered by [phylovega](https://github.com/Zsailer/phylovega)).
 ```python
-# Import PhyloVega.
-from phylovega import VegaTree
-
-# Initialize a Vega Tree object.
-vt = VegaTree(df)
-
-# Display the tree.
-vt.display()
+df.phylo.show(
+    height=500,
+)
 ```
 
 <img src='docs/_images/tree.png' align="middle" height="200">
