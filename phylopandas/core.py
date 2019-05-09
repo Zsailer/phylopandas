@@ -2,8 +2,6 @@
 import pandas as pd
 from pandas_flavor import register_dataframe_accessor, register_series_accessor
 
-from functools import wraps
-
 from . import seqio
 from . import treeio
 
@@ -199,8 +197,8 @@ class PhyloPandasDataFrameMethods(object):
         # Return dataframe (maintaining original order)
         return df[column_idx]
 
-    @wraps(TreeChart)
     def show(self, **kwargs):
+        __doc__ = TreeChart.__doc__
         # Show the tree using phylovega.
         try:
             return TreeChart(self._data.to_dict(orient='records'), **kwargs)
