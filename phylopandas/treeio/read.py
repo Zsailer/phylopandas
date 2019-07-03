@@ -37,9 +37,6 @@ def _dendropy_to_dataframe(
     add_node_labels=True,
     use_uids=True):
     """Convert Dendropy tree to Pandas dataframe."""
-    # Maximum distance from root.
-    tree.max_distance_from_root()
-
     # Initialize the data object.
     idx = []
     data = {
@@ -58,11 +55,18 @@ def _dendropy_to_dataframe(
         for i, node in enumerate(tree.internal_nodes()):
             node.label = str(i)
 
+    # Check is branch lengths were given.
+    branch_lengths_given = tree.length() > 0
+
     for node in tree.nodes():
         # Get node type
         if node.is_leaf():
             type_ = 'leaf'
-            label = str(node.taxon.label).replace(' ', '_')
+            # Check if node has taxon
+            if hasattr(node.taxon, 'label'):
+                label = str(node.taxon.label).replace(' ', '_')
+            else:
+                label = None
         elif node.is_internal():
             type_ = 'node'
             label = str(node.label)
@@ -71,13 +75,17 @@ def _dendropy_to_dataframe(
         id_ = label
         parent_node = node.parent_node
         length = node.edge_length
-        distance = node.distance_from_root()
+        if length is None:
+            distance = None
+        else:
+            distance = node.distance_from_root()
 
         # Is this node a root?
-        if parent_node is None and length is None:
+        if parent_node is None:
             parent_label = None
             parent_node = None
-            length = 0
+            if length is None and branch_lengths_given:
+                length = 0
             distance = 0
             type_ = 'root'
 
