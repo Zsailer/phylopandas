@@ -158,23 +158,23 @@ def read_blast_xml(filename, **kwargs):
         blast_record = NCBIXML.read(f)
 
     # Prepare DataFrame fields.
-    data = {'accession': [],
-            'hit_def': [],
-            'hit_id': [],
-            'title': [],
-            'length': [],
-            'e_value': [],
-            'sequence': []}
+    accession = []
+    hit_def = []
+    hit_id = []
+    title = []
+    length = []
+    e_value = []
+    sequence = []
 
     # Get alignments from blast result.
-    for i, s in enumerate(blast_record.alignments):
-        data['accession'] = s.accession
-        data['hit_def'] = s.hit_def
-        data['hit_id'] = s.hit_id
-        data['title'] = s.title
-        data['length'] = s.length
-        data['e_value'] = s.hsps[0].expect
-        data['sequence'] = s.hsps[0].sbjct
+    for s in blast_record.alignments:
 
-    # Port to DataFrame.
-    return pd.DataFrame(data)
+        accession.append(s.accession)
+        hit_def.append(s.hit_def)
+        hit_id.append(s.hit_id)
+        title.append(s.title)
+        length.append(s.length)
+        e_value.append(s.hsps[0].expect)
+        sequence.append(s.hsps[0].sbjct)
+
+    return pd.DataFrame({"accession":accession, "hit_def":hit_def, "hit_id":hit_id, "title":title, "length":length, "e_value":e_value, "sequence":sequence})
