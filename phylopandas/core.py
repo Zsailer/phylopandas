@@ -4,7 +4,7 @@ from pandas_flavor import register_dataframe_accessor, register_series_accessor
 
 from . import seqio
 from . import treeio
-
+from . import msa
 
 try: 
     from phylovega import TreeChart
@@ -204,3 +204,16 @@ class PhyloPandasDataFrameMethods(object):
             return TreeChart(self._data.to_dict(orient='records'), **kwargs)
         except NameError:
             raise Exception("Looks like phylovega couldn't be imported. Is phylovega installed?")
+
+
+    def msa(self, index_col='id', apply_colors=False, gap_character='-'):
+        """Build an alignment DataFrame.
+        
+        Rows are indexed by ID. Columns are labeled by position number.
+        """
+        return msa.get_alignment(
+            self._data,
+            index_col=index_col, 
+            apply_colors=apply_colors, 
+            gap_character=gap_character
+        )
