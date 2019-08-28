@@ -164,7 +164,11 @@ def read_blast_xml(filename, **kwargs):
             'title': [],
             'length': [],
             'e_value': [],
-            'sequence': []}
+            'sequence': [],
+            'subject_start': [],
+            'subject_end':[],
+            'query_start':[],
+            'query_end':[]}
 
     # Get alignments from blast result.
     for i, s in enumerate(blast_record.alignments):
@@ -175,6 +179,10 @@ def read_blast_xml(filename, **kwargs):
         data['length'].append(s.length)
         data['e_value'].append(s.hsps[0].expect)
         data['sequence'].append(s.hsps[0].sbjct)
+        data['subject_start'].append(s.hsps[0].sbjct_start)
+        data['subject_end'].append(s.hsps[0].sbjct_end)
+        data['query_start'].append(s.hsps[0].query_start)
+        data['query_end'].append(s.hsps[0].query_end)
 
     # Port to DataFrame.
     return pd.DataFrame(data)
