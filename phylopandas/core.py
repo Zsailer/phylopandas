@@ -197,10 +197,13 @@ class PhyloPandasDataFrameMethods(object):
         # Return dataframe (maintaining original order)
         return df[column_idx]
 
-    def show(self, **kwargs):
+    def display(self, **kwargs):
         __doc__ = TreeChart.__doc__
         # Show the tree using phylovega.
         try:
+            if TreeChart is None:
+                raise NameError
             return TreeChart(self._data.to_dict(orient='records'), **kwargs)
         except NameError:
-            raise Exception("Looks like phylovega couldn't be imported. Is phylovega installed?")
+            raise NameError("Looks like phylovega couldn't be imported. Is phylovega installed?")
+
