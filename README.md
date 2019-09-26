@@ -58,7 +58,7 @@ df = ph.read_newick('tree.newick')
 
 Visualize the phylogenetic data (powered by [phylovega](https://github.com/Zsailer/phylovega)).
 ```python
-df.phylo.show(
+df.phylo.display(
     height=500,
 )
 ```
