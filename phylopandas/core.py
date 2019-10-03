@@ -36,7 +36,7 @@ class PhyloPandasSeriesMethods(object):
 
 
 @register_dataframe_accessor('phylo')
-class PhyloPandasDataFrameMethods(object):
+class PhyloPandasDataFrameMethods(treeio.mixin.DataFrameTreeMethods):
     """PhyloPandas accessor to the Pandas DataFrame.
 
     This accessor adds reading/writing methods to the pandas DataFrame that

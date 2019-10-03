@@ -4,3 +4,4 @@ from .read import (read_nexml,
                    read_dendropy)
 
 from . import write
+from . import mixin
