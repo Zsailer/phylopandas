@@ -7,7 +7,6 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.Blast import NCBIXML
-import Bio.Alphabet
 
 # Import Phylopandas DataFrame
 import pandas as pd
@@ -38,7 +37,6 @@ def _read(
     filename,
     schema,
     seq_label='sequence',
-    alphabet=None,
     use_uids=True,
     **kwargs):
     """Use BioPython's sequence parsing module to convert any file format to
@@ -50,19 +48,6 @@ def _read(
         - description
         - sequence
     """
-    # Check Alphabet if given
-    if alphabet is None:
-        alphabet = Bio.Alphabet.Alphabet()
-
-    elif alphabet in ['dna', 'rna', 'protein', 'nucleotide']:
-        alphabet = getattr(Bio.Alphabet, 'generic_{}'.format(alphabet))
-
-    else:
-        raise Exception(
-            "The alphabet is not recognized. Must be 'dna', 'rna', "
-            "'nucleotide', or 'protein'.")
-
-    kwargs.update(alphabet=alphabet)
 
     # Prepare DataFrame fields.
     data = {
@@ -95,7 +80,6 @@ def _read_method(schema):
         self,
         filename,
         seq_label='sequence',
-        alphabet=None,
         combine_on='uid',
         use_uids=True,
         **kwargs):
@@ -105,7 +89,6 @@ def _read_method(schema):
             filename=filename,
             schema=schema,
             seq_label=seq_label,
-            alphabet=alphabet,
             use_uids=use_uids,
             **kwargs
         )
@@ -122,7 +105,6 @@ def _read_function(schema):
     def func(
         filename,
         seq_label='sequence',
-        alphabet=None,
         use_uids=True,
         **kwargs):
         # Use generic write class to write data.
@@ -130,7 +112,6 @@ def _read_function(schema):
             filename=filename,
             schema=schema,
             seq_label=seq_label,
-            alphabet=alphabet,
             use_uids=use_uids,
             **kwargs
         )
