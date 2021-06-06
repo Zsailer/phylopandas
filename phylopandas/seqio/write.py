@@ -7,7 +7,6 @@ import pandas as pd
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-import Bio.Alphabet
 
 
 def _write_doc_template(schema):
@@ -36,7 +35,6 @@ def pandas_df_to_biopython_seqrecord(
     id_col='uid',
     sequence_col='sequence',
     extra_data=None,
-    alphabet=None,
     ):
     """Convert pandas dataframe to biopython seqrecord for easy writing.
 
@@ -54,9 +52,6 @@ def pandas_df_to_biopython_seqrecord(
     extra_data : list
         extra columns to use in sequence description line
 
-    alphabet :
-        biopython Alphabet object
-
     Returns
     -------
     seq_records :
@@ -70,7 +65,7 @@ def pandas_df_to_biopython_seqrecord(
         # sequence data and therefore the row is ignored.
         try:
             # Get sequence
-            seq = Seq(row[sequence_col], alphabet=alphabet)
+            seq = Seq(row[sequence_col])
 
             # Get id
             id = row[id_col]
@@ -97,7 +92,6 @@ def pandas_series_to_biopython_seqrecord(
     id_col='uid',
     sequence_col='sequence',
     extra_data=None,
-    alphabet=None
     ):
     """Convert pandas series to biopython seqrecord for easy writing.
 
@@ -121,7 +115,7 @@ def pandas_series_to_biopython_seqrecord(
         List of biopython seqrecords.
     """
     # Get sequence
-    seq = Seq(series[sequence_col], alphabet=alphabet)
+    seq = Seq(series[sequence_col])
 
     # Get id
     id = series[id_col]
@@ -148,7 +142,6 @@ def _write(
     id_col='uid',
     sequence_col='sequence',
     extra_data=None,
-    alphabet=None,
     **kwargs):
     """General write function. Write phylopanda data to biopython format.
 
@@ -167,17 +160,6 @@ def _write(
     id_only : bool (default=False)
         If True, use only the ID column to label sequences in fasta.
     """
-    # Check Alphabet if given
-    if alphabet is None:
-        alphabet = Bio.Alphabet.Alphabet()
-
-    elif alphabet in ['dna', 'rna', 'protein', 'nucleotide']:
-        alphabet = getattr(Bio.Alphabet, 'generic_{}'.format(alphabet))
-
-    else:
-        raise Exception(
-            "The alphabet is not recognized. Must be 'dna', 'rna', "
-            "'nucleotide', or 'protein'.")
 
     # Build a list of records from a pandas DataFrame
     if type(data) is pd.DataFrame:
@@ -186,7 +168,6 @@ def _write(
             id_col=id_col,
             sequence_col=sequence_col,
             extra_data=extra_data,
-            alphabet=alphabet,
         )
 
     # Build a record from a pandas Series
@@ -196,7 +177,6 @@ def _write(
             id_col=id_col,
             sequence_col=sequence_col,
             extra_data=extra_data,
-            alphabet=alphabet,
         )
 
     # Write to disk or return string
@@ -216,7 +196,6 @@ def _write_method(schema):
         id_col='uid',
         sequence_col='sequence',
         extra_data=None,
-        alphabet=None,
         **kwargs):
         # Use generic write class to write data.
         return _write(
@@ -226,7 +205,6 @@ def _write_method(schema):
             id_col=id_col,
             sequence_col=sequence_col,
             extra_data=extra_data,
-            alphabet=alphabet,
             **kwargs
         )
     # Update docs
@@ -244,7 +222,6 @@ def _write_function(schema):
         id_col='uid',
         sequence_col='sequence',
         extra_data=None,
-        alphabet=None,
         **kwargs):
         # Use generic write class to write data.
         return _write(
@@ -254,7 +231,6 @@ def _write_function(schema):
             id_col=id_col,
             sequence_col=sequence_col,
             extra_data=extra_data,
-            alphabet=alphabet,
             **kwargs
         )
     # Update docs
